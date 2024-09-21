@@ -29,6 +29,18 @@ builder.Services.AddMeichuHackaThon2024Services();  // 使用你定義的注入方法
 
 var app = builder.Build();
 
+// 執行資料庫遷移
+using (var scope = app.Services.CreateScope())
+{
+    var service = scope.ServiceProvider;
+    var context = service.GetRequiredService<MeichuHackaThonDBContext>();
+
+    // 自動執行資料庫遷移
+    context.Database.Migrate();  // 這行會自動執行遷移
+
+    SeedData.Initialize(service);  // 這行負責初始化資料
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
