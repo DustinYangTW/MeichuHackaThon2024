@@ -1,0 +1,6 @@
+@MeichuHackaThon_HostAddress = http://localhost:5187
+
+GET {{MeichuHackaThon_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
