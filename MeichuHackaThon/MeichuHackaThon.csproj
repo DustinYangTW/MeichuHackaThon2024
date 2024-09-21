@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MeichuHackaThon2024Model\MeichuHackaThon2024Model.csproj" />
+    <ProjectReference Include="..\MeichuHackaThon2024Services\MeichuHackaThon2024Services.csproj" />
   </ItemGroup>
 
 </Project>

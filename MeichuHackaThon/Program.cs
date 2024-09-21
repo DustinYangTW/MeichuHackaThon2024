@@ -1,5 +1,6 @@
 using MeichuHackaThon2024Model.ContextModel;
 using Microsoft.EntityFrameworkCore;
+using MeichuHackaThon2024Services.DIService;  // 引用命名空間
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// 註冊其他服務
+builder.Services.AddMeichuHackaThon2024Services();  // 使用你定義的注入方法
 
 var app = builder.Build();
 
