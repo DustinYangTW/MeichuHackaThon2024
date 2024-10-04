@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MeichuHackaThon2024Model.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeichuHackaThon2024Model.ContextModel
 {
@@ -7,6 +8,9 @@ namespace MeichuHackaThon2024Model.ContextModel
         public MeichuHackaThonDBContext(DbContextOptions<MeichuHackaThonDBContext> options) : base(options)
         {
         }
+        #region 增加Table
+        public virtual DbSet<User> Users { get; set; }
+        #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
