@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeichuHackaThon", "MeichuHackaThon\MeichuHackaThon.csproj", "{B71317D3-A644-4374-97E6-6FDDEC198234}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeichuHackaThon2024Model", "MeichuHackaThon2024Model\MeichuHackaThon2024Model.csproj", "{5A9854E5-8B23-4706-86D0-8EB802A5731A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeichuHackaThon2024Services", "MeichuHackaThon2024Services\MeichuHackaThon2024Services.csproj", "{2FD347E3-0981-47A1-867B-316F4067B150}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeichuHackaThon2024", "MeichuHackaThon2024\MeichuHackaThon2024.csproj", "{281C0A14-8170-4AD8-BA1D-61191EFCCDF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeichuHackaThon2024", "MeichuHackaThon2024\MeichuHackaThon2024.csproj", "{281C0A14-8170-4AD8-BA1D-61191EFCCDF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B71317D3-A644-4374-97E6-6FDDEC198234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B71317D3-A644-4374-97E6-6FDDEC198234}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B71317D3-A644-4374-97E6-6FDDEC198234}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B71317D3-A644-4374-97E6-6FDDEC198234}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A9854E5-8B23-4706-86D0-8EB802A5731A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5A9854E5-8B23-4706-86D0-8EB802A5731A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A9854E5-8B23-4706-86D0-8EB802A5731A}.Release|Any CPU.ActiveCfg = Release|Any CPU
