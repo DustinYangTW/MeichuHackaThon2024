@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using MeichuHackaThon2024Model.Enums;
 
 namespace MeichuHackaThon2024Model.Models
 {
@@ -30,32 +31,19 @@ namespace MeichuHackaThon2024Model.Models
         /// 擁擠程度
         /// </summary>
         [DisplayName("擁擠程度")]
-        public int CrowdingSysno { get; set; }
-
-
-        [ForeignKey("CrowdingSysno")]
-        public required Crowding Crowding { get; set; }
+        public CrowdingEnum CrowdingEnumType { get; set; }
 
 
         /// <summary>
         /// 景點種類
         /// </summary>
         [DisplayName("景點種類")]
-        public int FilterSysno { get; set; }
-
-
-        [ForeignKey("FilterSysno")]
-        public required Filter Filter { get; set; }
-
+        public AttractionsEnum AttractionsEnumType { get; set; }
 
         /// <summary>
         /// 交通運輸
         /// </summary>
         [DisplayName("交通運輸")]
-        public int TransportCompSysno { get; set; }
-
-
-        [ForeignKey("TransportCompSysno")]
-        public required TransportComp TransportComp { get; set; }
+        public TransportCompEnum TransportCompEnumType { get; set; }
     }
 }
