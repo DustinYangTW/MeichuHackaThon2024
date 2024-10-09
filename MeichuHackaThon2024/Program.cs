@@ -14,7 +14,7 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddDbContext<MeichuHackaThonDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MeichuHackaThon2024DBContext"))
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MeichuHackaThonDBContext"))
 );
 
 // Add services to the container.

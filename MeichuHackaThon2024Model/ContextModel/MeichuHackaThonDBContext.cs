@@ -20,7 +20,7 @@ namespace MeichuHackaThon2024Model.ContextModel
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=localhost;Database=MeichuHackaThon2024;");
+                optionsBuilder.UseSqlServer("Server=localhost;Database=MeichuHackaThonDBContext;");
             }
         }
     }
