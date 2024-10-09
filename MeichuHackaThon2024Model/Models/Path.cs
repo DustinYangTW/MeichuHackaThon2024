@@ -22,9 +22,9 @@ namespace MeichuHackaThon2024Model.Models
         public float CostTime { get; set; }
 
         /// <summary>
-        /// 距離(KM)
+        /// 距離(M)
         /// </summary>
-        [DisplayName("距離(KM)")]
+        [DisplayName("距離(M)")]
         public float Distance { get; set; }
 
         /// <summary>
