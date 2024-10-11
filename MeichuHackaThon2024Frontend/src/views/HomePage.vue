@@ -2,10 +2,12 @@
 import { useImagesStore } from '@/stores/images';
 
 const imagesStore = useImagesStore()
+const router = useRouter();
 
 const currentIndex = ref<number>(0)
 const search = ref<string>('')
 const searchTmp = ref<string>('')
+const searchAlert = ref(false)
 
 const nextImage = () => {
   currentIndex.value = (currentIndex.value + 1) % imagesStore.HomePageBg.length;
@@ -15,8 +17,18 @@ const fuzzySearch = () => {
   if (searchTmp.value === search.value || search.value === '') {
     return;
   }
+  searchAlert.value = false;
   searchTmp.value = search.value;
   console.log(`q = ${search.value}`);
+}
+
+const searchPath = () => {
+  if (search.value === '') {
+    searchAlert.value = true;
+    return;
+  }
+
+  router.push({ name: 'PathSelectPage', query: { q: search.value } });
 }
 
 onMounted(() => {
@@ -30,10 +42,10 @@ onMounted(() => {
     class="w-full h-full bg-cover bg-no-repeat bg-center duration-1000 flex flex-col justify-end items-center pb-36 pl-8 text-white"
     :style="{ backgroundImage: `url(${imagesStore.HomePageBg[currentIndex]})` }"
   >
-    <div class="w-full text-2xl sm:text-4xl md:text-5xl font-medium">
+    <div class="w-full text-white text-2xl sm:text-4xl md:text-5xl font-medium">
       Welcome to 新竹
     </div>
-    <div class="w-full text-4xl sm:text-6xl md:text-8xl py-4 font-extrabold">
+    <div class="w-full text-white text-4xl sm:text-6xl md:text-8xl py-4 font-extrabold">
       開始你的旅程吧
     </div>
     <div class="w-full flex flex-wrap gap-3">
@@ -42,10 +54,12 @@ onMounted(() => {
         @input="fuzzySearch"
         type="text"
         class="rounded-2xl bg-gray-500 px-6 text-white text-2xl opacity-70 w-[250px] sm:w-[400px] md:w-[500px] h-[65px]"
+        :class="[ searchAlert ? 'border-4 border-red-500' : 'border-4 border-transparent']"
         placeholder="Search place, location"
       >
       <button
         class="text-2xl p-4 bg-white text-black rounded-2xl w-[65px] h-[65px] flex justify-center items-center hover:scale-110"
+        @click="searchPath"
       >
         <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
       </button>
