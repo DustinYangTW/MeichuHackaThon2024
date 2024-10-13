@@ -3,6 +3,7 @@ using MeichuHackaThon2024Model.ContextModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeichuHackaThon2024Model.Migrations
 {
     [DbContext(typeof(MeichuHackaThonDBContext))]
-    partial class MeichuHackaThonDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241013005303_Add_Path_Detail")]
+    partial class Add_Path_Detail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,11 +26,11 @@ namespace MeichuHackaThon2024Model.Migrations
 
             modelBuilder.Entity("MeichuHackaThon2024Model.Models.PathDetail", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("SysId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SysId"));
 
                     b.Property<double>("CostTime")
                         .HasColumnType("float");
@@ -47,7 +50,7 @@ namespace MeichuHackaThon2024Model.Migrations
                     b.Property<int>("PathId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("SysId");
 
                     b.ToTable("Paths");
                 });

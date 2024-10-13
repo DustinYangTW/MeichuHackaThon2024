@@ -3,6 +3,7 @@ using MeichuHackaThon2024Model.ContextModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeichuHackaThon2024Model.Migrations
 {
     [DbContext(typeof(MeichuHackaThonDBContext))]
-    partial class MeichuHackaThonDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241012211839_Add_Data")]
+    partial class Add_Data
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,33 +24,35 @@ namespace MeichuHackaThon2024Model.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MeichuHackaThon2024Model.Models.PathDetail", b =>
+            modelBuilder.Entity("MeichuHackaThon2024Model.Models.Path", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("SysId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SysId"));
 
-                    b.Property<double>("CostTime")
-                        .HasColumnType("float");
+                    b.Property<float>("CostTime")
+                        .HasColumnType("real");
 
-                    b.Property<int>("Crowding")
+                    b.Property<int>("CrowdingEnumType")
                         .HasColumnType("int");
 
-                    b.Property<string>("Destination")
+                    b.Property<string>("EndPoint")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Location")
+                    b.Property<int>("RouteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StartPoint")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PathDetailId")
+                    b.Property<int>("TransportType")
                         .HasColumnType("int");
 
-                    b.Property<int>("PathId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("SysId");
 
                     b.ToTable("Paths");
                 });

@@ -2,7 +2,7 @@
 
 namespace MeichuHackaThon2024Model.Enums
 {
-    public enum TransportCompEnum : int
+    public enum TransportTypeEnum : int
     {
         /// <summary>
         /// 公車

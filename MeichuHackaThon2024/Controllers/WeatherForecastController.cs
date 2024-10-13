@@ -1,3 +1,4 @@
+using MeichuHackaThon2024Model.ContextModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeichuHackaThon2024.Controllers
@@ -28,6 +29,38 @@ namespace MeichuHackaThon2024.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+    }
+    [Route("DataBase/[controller]")]
+    [ApiController]
+    public class DataBaseController : ControllerBase
+    {
+        private readonly MeichuHackaThonDBContext _context_info;
+        public DataBaseController(MeichuHackaThonDBContext context_info)
+        {
+            _context_info = context_info;
+        }
+
+        [HttpGet(Name = "DataBase")]
+        public IEnumerable<MeichuHackaThon2024Model.Models.PathDetail> Get()
+        {
+            return _context_info.Paths;
+        }
+    }
+    [Route("Path/[controller]")]
+    [ApiController]
+    public class PathController : ControllerBase
+    {
+        private readonly MeichuHackaThonDBContext _context_info;
+        public PathController(MeichuHackaThonDBContext context_info)
+        {
+            _context_info = context_info;
+        }
+
+        [HttpGet(Name = "PathInfo")]
+        public IEnumerable<MeichuHackaThon2024Model.Models.PathDetail> Get()
+        {
+            return _context_info.Paths;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace MeichuHackaThon2024Model.ContextModel
         {
         }
         #region 增加Table
-        public virtual DbSet<Models.Path> Paths { get; set; }
+        public virtual DbSet<Models.PathDetail> Paths { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
