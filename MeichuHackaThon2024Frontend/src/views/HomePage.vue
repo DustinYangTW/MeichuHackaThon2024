@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useImagesStore } from '@/stores/images';
 
+const mockData = [
+  '青青草原', '青草公園', '新竹體育館', '新竹舊派出所', '薰衣草森林', '新竹尖石', '小叮噹科學主題樂園', '十八尖山', '新竹市立動物園', '新竹都城煌廟'
+]
+
 const imagesStore = useImagesStore()
 const router = useRouter();
 
@@ -8,6 +12,8 @@ const currentIndex = ref<number>(0)
 const search = ref<string>('')
 const searchTmp = ref<string>('')
 const searchAlert = ref(false)
+const fuzzyList = ref<string[]>([]);
+const fuzzyDialog = ref(false);
 
 const nextImage = () => {
   currentIndex.value = (currentIndex.value + 1) % imagesStore.HomePageBg.length;
@@ -20,6 +26,7 @@ const fuzzySearch = () => {
   searchAlert.value = false;
   searchTmp.value = search.value;
   console.log(`q = ${search.value}`);
+  fuzzyList.value = mockData.filter((item) => item.includes(search.value));
 }
 
 const searchPath = () => {
@@ -48,8 +55,22 @@ onMounted(() => {
     <div class="w-full text-white text-4xl sm:text-6xl md:text-8xl py-4 font-extrabold">
       開始你的旅程吧
     </div>
-    <div class="w-full flex flex-wrap gap-3">
+    <div class="w-full flex flex-wrap gap-3 relative">
+      <div
+        v-if="fuzzyDialog"
+        class="absolute left-0 w-[250px] sm:w-[400px] md:w-[500px] bg-white rounded-2xl overflow-y-auto text-black"
+        :style="{
+          height: Math.min(fuzzyList.length * 50, 250) + 'px',
+          top: '-' + Math.min(fuzzyList.length * 50 + 10, 250) + 'px'
+        }"
+      >
+        <div class="bg-gray-100 h-[50px] flex justify-start items-center pl-3 " v-for="item in fuzzyList">
+          {{ item }}
+        </div>
+      </div>
       <input
+        v-on:focus="() => fuzzyDialog = true"
+        @blur="() => fuzzyDialog = false"
         v-model="search"
         @input="fuzzySearch"
         type="text"
@@ -66,3 +87,9 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<style scpoe>
+::-webkit-scrollbar {
+  display: none;
+}
+</style>
