@@ -12,25 +12,30 @@ const currentIndex = ref<number>(0)
 const search = ref<string>('')
 const searchTmp = ref<string>('')
 const searchAlert = ref(false)
-const fuzzyList = ref<string[]>([]);
+const fuzzyList = ref<string[]>(mockData);
 const fuzzyDialog = ref(false);
 
 const nextImage = () => {
   currentIndex.value = (currentIndex.value + 1) % imagesStore.HomePageBg.length;
 };
 
+const selectFromList = (item: string) => {
+  search.value = item;
+  fuzzyDialog.value = false;
+  fuzzySearch();
+}
+
 const fuzzySearch = () => {
+  fuzzyList.value = mockData.filter((item) => item.includes(search.value));
   if (searchTmp.value === search.value || search.value === '') {
     return;
   }
   searchAlert.value = false;
   searchTmp.value = search.value;
-  console.log(`q = ${search.value}`);
-  fuzzyList.value = mockData.filter((item) => item.includes(search.value));
 }
 
 const searchPath = () => {
-  if (search.value === '') {
+  if (!mockData.includes(search.value)) {
     searchAlert.value = true;
     return;
   }
@@ -49,6 +54,7 @@ onMounted(() => {
     class="w-full h-full bg-cover bg-no-repeat bg-center duration-1000 flex flex-col justify-end items-center pb-36 pl-8 text-white"
     :style="{ backgroundImage: `url(${imagesStore.HomePageBg[currentIndex]})` }"
   >
+    <div v-if="fuzzyDialog" class="absolute top-0 left-0 w-[100vw] h-[100vh] z-0" @click="fuzzyDialog = false" />
     <div class="w-full text-white text-2xl sm:text-4xl md:text-5xl font-medium">
       Welcome to 新竹
     </div>
@@ -58,19 +64,22 @@ onMounted(() => {
     <div class="w-full flex flex-wrap gap-3 relative">
       <div
         v-if="fuzzyDialog"
-        class="absolute left-0 w-[250px] sm:w-[400px] md:w-[500px] bg-white rounded-2xl overflow-y-auto text-black"
+        class="absolute left-0 w-[250px] sm:w-[400px] md:w-[500px] bg-white rounded-2xl overflow-y-auto text-black z-10"
         :style="{
           height: Math.min(fuzzyList.length * 50, 250) + 'px',
-          top: '-' + Math.min(fuzzyList.length * 50 + 10, 250) + 'px'
+          top: '-' + Math.min(fuzzyList.length * 50 + 5, 255) + 'px'
         }"
       >
-        <div class="bg-gray-100 h-[50px] flex justify-start items-center pl-3 " v-for="item in fuzzyList">
+        <div
+          v-for="item in fuzzyList"
+          class="bg-gray-100 h-[50px] flex justify-start items-center pl-3 text-xl hover:bg-gray-300 hover:text-2xl hover:font-bold cursor-pointer"
+          @click="selectFromList(item)"
+        >
           {{ item }}
         </div>
       </div>
       <input
         v-on:focus="() => fuzzyDialog = true"
-        @blur="() => fuzzyDialog = false"
         v-model="search"
         @input="fuzzySearch"
         type="text"
