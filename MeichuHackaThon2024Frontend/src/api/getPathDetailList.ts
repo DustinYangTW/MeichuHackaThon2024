@@ -21,8 +21,10 @@ export interface Response {
 export async function getPathDetailList(payload: Payload): Promise<Response> {
   const { id } = payload;
   try {
-    const { data } = await axios.post<Response>('/getPathDetailList', {
-      id
+    const { data } = await axios.get<Response>('/getPathDetailList', {
+      params: {
+        id
+      }
     });
     return data;
   } catch (error) {

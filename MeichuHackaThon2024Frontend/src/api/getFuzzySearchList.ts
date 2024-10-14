@@ -16,8 +16,11 @@ export interface Payload {
 export async function getFuzzySearchList(payload: Payload): Promise<FuzzyList> {
   const { q, filter } = payload;
   try {
-    const { data } = await axios.post<FuzzyList>('/getFuzzyList', {
-      q, filter
+    const { data } = await axios.get<FuzzyList>('/getFuzzyList', {
+      params: {
+        q,
+        filter
+      }
     });
     return data;
   } catch (error) {
