@@ -1,61 +1,7 @@
 <script setup lang="ts">
-
-type Path = {
-  /**
-   * 路徑編號
-   */
-  id: number;
-  /**
-   * 目的地名稱
-   * @example ‘青青草原’ | ‘新竹體育館’
-   */
-  destination: string;
-  /**
-   * 本地位置名稱
-   * @example ‘本地’ | '陽明交大'
-   */
-  location: string;
-  /**
-   * 耗時
-   * @example "1h 30m"
-   */
-  costTime: string;
-  /**
-   * 到達時間
-   * @example "11:30"
-   */
-  arrivalTime: string,
-  /**
-   * 交通工具種類以及%數
-   */
-  transportComp: Record<'公車' | 'Bike' | '步行', number>
-  /**
-   * 擁擠程度
-   */
-  crowding: number,
-  /**
-   * 子路徑選項
-   */
-  path_details: PathDetail[]
-}
-
-type PathDetail = {
-  destination: {
-    gps: string;
-    name: string;
-  };
-  location: {
-    gps: string;
-    name: string;
-  };
-  costTime: string;
-  arrivalTime: string;
-  transport: {
-    type: '公車' | 'Bike' | '步行';
-    remark: string;
-  };
-  crowding: number;
-}
+import SideInfo from "../components/PathPage/SideInfo.vue";
+import BottomInfo from "../components/PathPage/BottomInfo.vue";
+import type { Path } from '../type'
 
 const mockData: Path = {
   id: 1,
@@ -176,7 +122,23 @@ const mockData: Path = {
 };
 
 const route = useRoute();
-const data = ref();
+const data = reactive<Path>({
+  id: 0,
+  destination: '-',
+  location: '-',
+  costTime: '-',
+  arrivalTime: '-',
+  transportComp: {
+    '公車': 0,
+    'Bike': 0,
+    '步行': 0
+  },
+  crowding: 0,
+  path_details: [],
+});
+
+const completedSteps = ref<number>(0);
+const totalSteps = ref<number>(0);
 
 onMounted(async() => {
   const { id } = route.query;
@@ -193,14 +155,40 @@ onMounted(async() => {
     }, 1500);
   })
 
-  data.value = response;
+  Object.assign(data, response);
+
+  totalSteps.value = data.path_details.length;
+
+  console.log(response);
 })
 </script>
 
 <template>
   <div
-    class="w-full h-full flex flex-col items-center p-4 text-white"
+    class="relative w-full h-full flex flex-col items-center p-4 text-white"
   >
-    <h1>路徑頁 {{ data }}</h1>
+    <div class="absolute w-[100dvw] h-[100dvh] top-0 left-0 flex justify-center items-center bg-gray-900">
+      {map}
+    </div>
+    <div class="absolute top-4 text-3xl font-extrabold text-white">
+      {{ data.destination }}
+    </div>
+    <div class="absolute w-fit h-fit top-24 left-10 flex flex-col px-5 py-4 bg-gray-800 rounded-xl select-none">
+      <SideInfo
+        :costTime="data.costTime"
+        :completedSteps="completedSteps"
+        :totalSteps="totalSteps"
+        :transport="data.path_details[completedSteps]?.transport ?? {}"
+      />
+    </div>
+    <div class="absolute bottom-8 mx-6 bg-gray-800 w-5/6 px-6 py-4 rounded-xl select-none">
+      <BottomInfo
+        :data="data.path_details[completedSteps] ?? {}"
+        :hasNextStep="completedSteps < totalSteps - 1"
+        :hasPreviousStep="completedSteps > 0"
+        @nextStep="completedSteps++"
+        @previousStep="completedSteps--"
+      />
+    </div>
   </div>
 </template>
