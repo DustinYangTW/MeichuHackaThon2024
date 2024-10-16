@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import SideInfo from "../components/PathPage/SideInfo.vue";
 import BottomInfo from "../components/PathPage/BottomInfo.vue";
+import LoadingDialog from "../components/PathPage/LoadingDialog.vue";
+import PopUpDoalog from "../components/PathPage/PopUpDoalog.vue";
 import type { Path } from '../type'
 
 const mockData: Path = {
@@ -36,11 +38,11 @@ const mockData: Path = {
     {
       destination: {
         gps: '24.791641, 120.997713',
-        name: '生科館人社院'
+        name: '新竹轉運站'
       },
       location: {
         gps: '24.785061, 120.995061',
-        name: '新竹轉運站'
+        name: '生科館人社院'
       },
       costTime: '10分',
       arrivalTime: '08:13',
@@ -53,11 +55,11 @@ const mockData: Path = {
     {
       destination: {
         gps: '24.791641, 120.997713',
-        name: '新竹轉運站'
+        name: '新竹火車站(中正路)'
       },
       location: {
         gps: '24.785061, 120.995061',
-        name: '新竹火車站(中正路)'
+        name: '新竹轉運站'
       },
       costTime: '5分',
       arrivalTime: '08:23',
@@ -70,11 +72,11 @@ const mockData: Path = {
     {
       destination: {
         gps: '24.791641, 120.997713',
-        name: '新竹火車站(中正路)'
+        name: '朝山'
       },
       location: {
         gps: '24.785061, 120.995061',
-        name: '朝山'
+        name: '新竹火車站(中正路)'
       },
       costTime: '20分',
       arrivalTime: '08:28',
@@ -87,11 +89,11 @@ const mockData: Path = {
     {
       destination: {
         gps: '24.791641, 120.997713',
-        name: '朝山'
+        name: '香山天后宮'
       },
       location: {
         gps: '24.785061, 120.995061',
-        name: '香山天后宮'
+        name: '朝山'
       },
       costTime: '5分',
       arrivalTime: '08:48',
@@ -104,11 +106,11 @@ const mockData: Path = {
     {
       destination: {
         gps: '24.791641, 120.997713',
-        name: '香山天后宮'
+        name: '青青草原'
       },
       location: {
         gps: '24.785061, 120.995061',
-        name: '青青草原'
+        name: '香山天后宮'
       },
       costTime: '16分',
       arrivalTime: '09:04',
@@ -139,13 +141,39 @@ const data = reactive<Path>({
 
 const completedSteps = ref<number>(0);
 const totalSteps = ref<number>(0);
+const LoadingDialogVisable = ref<boolean>(false);
+const PopUpDoalogVisable = ref<boolean>(false);
+
+const steps = (action: 'next' | 'pervious') => {
+  if (action === 'next') {
+    if (completedSteps.value === totalSteps.value) {
+      return;
+    }
+
+    completedSteps.value++;
+
+    if (completedSteps.value === totalSteps.value) {
+      PopUpDoalogVisable.value = true;
+    }
+  }
+
+  if (action === 'pervious') {
+    if (completedSteps.value === 0) {
+      return;
+    }
+
+    completedSteps.value--;
+  }
+}
 
 onMounted(async() => {
+  LoadingDialogVisable.value = true;
   const { id } = route.query;
 
   // todo 未正確傳遞 query string value 導回首頁
   if(!id) {
     console.log('路徑編號錯誤');
+    LoadingDialogVisable.value = false;
     return;
   }
 
@@ -155,11 +183,16 @@ onMounted(async() => {
     }, 1500);
   })
 
+  // init
   Object.assign(data, response);
 
+  PopUpDoalogVisable.value = false;
+  completedSteps.value = 0;
   totalSteps.value = data.path_details.length;
 
   console.log(response);
+
+  LoadingDialogVisable.value = false;
 })
 </script>
 
@@ -171,11 +204,11 @@ onMounted(async() => {
       {map}
     </div>
     <div class="absolute top-4 text-3xl font-extrabold text-white">
-      {{ data.destination }}
+      目的地：{{ data.destination }}
     </div>
     <div class="absolute w-fit h-fit top-24 left-10 flex flex-col px-5 py-4 bg-gray-800 rounded-xl select-none">
       <SideInfo
-        :costTime="data.costTime"
+        :costTime="data.path_details[completedSteps]?.costTime ?? '-'"
         :completedSteps="completedSteps"
         :totalSteps="totalSteps"
         :transport="data.path_details[completedSteps]?.transport ?? {}"
@@ -186,9 +219,11 @@ onMounted(async() => {
         :data="data.path_details[completedSteps] ?? {}"
         :hasNextStep="completedSteps < totalSteps - 1"
         :hasPreviousStep="completedSteps > 0"
-        @nextStep="completedSteps++"
-        @previousStep="completedSteps--"
+        @nextStep="steps('next')"
+        @previousStep="steps('pervious')"
       />
     </div>
+    <LoadingDialog v-if="LoadingDialogVisable" />
+    <PopUpDoalog v-if="PopUpDoalogVisable" />
   </div>
 </template>

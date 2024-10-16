@@ -28,9 +28,9 @@ defineProps<{
   <div class="h-[2px] w-full bg-white opacity-30 my-4" />
   <div class="flex flex-col gap-1">
     <div class="text-sm">
-      花費時間
+      估計花費時間
     </div>
-    <div class="text-3xl font-semibold">
+    <div class="text-3xl font-semibold text-center">
       {{ costTime }}
     </div>
   </div>
