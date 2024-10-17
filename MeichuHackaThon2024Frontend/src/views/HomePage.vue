@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { useImagesStore } from '@/stores/images';
-
-const mockData = [
-  '青青草原', '青草公園', '新竹體育館', '新竹舊派出所', '薰衣草森林', '新竹尖石', '小叮噹科學主題樂園', '十八尖山', '新竹市立動物園', '新竹都城煌廟'
-]
+import { getFuzzySearchList } from '../api';
+import type { GetFuzzySearchListPayload } from '../api';
 
 const imagesStore = useImagesStore()
 const router = useRouter();
@@ -12,7 +10,7 @@ const currentIndex = ref<number>(0)
 const search = ref<string>('')
 const searchTmp = ref<string>('')
 const searchAlert = ref(false)
-const fuzzyList = ref<string[]>(mockData);
+const fuzzyList = ref<string[]>([]);
 const fuzzyDialog = ref(false);
 
 const nextImage = () => {
@@ -25,17 +23,19 @@ const selectFromList = (item: string) => {
   fuzzySearch();
 }
 
-const fuzzySearch = () => {
-  fuzzyList.value = mockData.filter((item) => item.includes(search.value));
+const fuzzySearch = async () => {
+  fuzzyList.value = fuzzyList.value.filter((item) => item.includes(search.value));
   if (searchTmp.value === search.value || search.value === '') {
     return;
   }
   searchAlert.value = false;
   searchTmp.value = search.value;
+
+  await refreshFuzzyList();
 }
 
 const searchPath = () => {
-  if (!mockData.includes(search.value)) {
+  if (!fuzzyList.value.includes(search.value)) {
     searchAlert.value = true;
     return;
   }
@@ -43,9 +43,27 @@ const searchPath = () => {
   router.push({ name: 'PathSelectPage', query: { q: search.value } });
 }
 
-onMounted(() => {
+const refreshFuzzyList = async () => {
+  const payload: GetFuzzySearchListPayload = {
+    q: search.value,
+    filter: 'all',
+  }
+
+  const response = await getFuzzySearchList(payload);
+
+  // todo 錯誤處理
+  if (!response.success) {
+    return;
+  }
+
+  fuzzyList.value = response.data.list;
+}
+
+onMounted(async () => {
   const intervalId = setInterval(nextImage, 3000);
   onUnmounted(() => clearInterval(intervalId));
+
+  await refreshFuzzyList();
 })
 </script>
 

@@ -3,125 +3,9 @@ import SideInfo from "../components/PathPage/SideInfo.vue";
 import BottomInfo from "../components/PathPage/BottomInfo.vue";
 import LoadingDialog from "../components/PathPage/LoadingDialog.vue";
 import PopUpDoalog from "../components/PathPage/PopUpDoalog.vue";
-import type { Path } from '../type'
-
-const mockData: Path = {
-  id: 1,
-  destination: '青青草原',
-  location: '國立陽明交通大學體育館',
-  costTime: '1h 4m',
-  arrivalTime: '09:04',
-  transportComp: {
-    '公車': 33,
-    'Bike': 17,
-    '步行': 17
-  },
-  crowding: 0,
-  path_details: [
-    {
-      destination: {
-        gps: '24.791641, 120.997713',
-        name: '國立陽明交通大學體育館'
-      },
-      location: {
-        gps: '24.785061, 120.995061',
-        name: '生科館人社院'
-      },
-      costTime: '13分',
-      arrivalTime: '08:00',
-      transport: {
-        type: '步行',
-        remark: '步行'
-      },
-      crowding: 2
-    },
-    {
-      destination: {
-        gps: '24.791641, 120.997713',
-        name: '新竹轉運站'
-      },
-      location: {
-        gps: '24.785061, 120.995061',
-        name: '生科館人社院'
-      },
-      costTime: '10分',
-      arrivalTime: '08:13',
-      transport: {
-        type: '公車',
-        remark: '83'
-      },
-      crowding: 4
-    },
-    {
-      destination: {
-        gps: '24.791641, 120.997713',
-        name: '新竹火車站(中正路)'
-      },
-      location: {
-        gps: '24.785061, 120.995061',
-        name: '新竹轉運站'
-      },
-      costTime: '5分',
-      arrivalTime: '08:23',
-      transport: {
-        type: '步行',
-        remark: '步行'
-      },
-      crowding: 1
-    },
-    {
-      destination: {
-        gps: '24.791641, 120.997713',
-        name: '朝山'
-      },
-      location: {
-        gps: '24.785061, 120.995061',
-        name: '新竹火車站(中正路)'
-      },
-      costTime: '20分',
-      arrivalTime: '08:28',
-      transport: {
-        type: '公車',
-        remark: '公車編號 5801'
-      },
-      crowding: 3
-    },
-    {
-      destination: {
-        gps: '24.791641, 120.997713',
-        name: '香山天后宮'
-      },
-      location: {
-        gps: '24.785061, 120.995061',
-        name: '朝山'
-      },
-      costTime: '5分',
-      arrivalTime: '08:48',
-      transport: {
-        type: '步行',
-        remark: '步行'
-      },
-      crowding: 3
-    },
-    {
-      destination: {
-        gps: '24.791641, 120.997713',
-        name: '青青草原'
-      },
-      location: {
-        gps: '24.785061, 120.995061',
-        name: '香山天后宮'
-      },
-      costTime: '16分',
-      arrivalTime: '09:04',
-      transport: {
-        type: 'Bike',
-        remark: '香山天后宮站'
-      },
-      crowding: 1
-    }
-  ],
-};
+import { getPathDetailList } from '../api';
+import type { GetPathDetailListPayload } from '../api';
+import type { Path, PathDetail } from '../type';
 
 const route = useRoute();
 const router = useRouter();
@@ -138,7 +22,7 @@ const data = reactive<Path>({
     '步行': 0
   },
   crowding: 0,
-  path_details: [],
+  path_details: [] as PathDetail[],
 });
 
 const completedSteps = ref<number>(0);
@@ -197,15 +81,19 @@ onMounted(async() => {
     return;
   }
 
-  // 模擬 api
-  const response: Path = await new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(mockData);
-    }, 1500);
-  })
+  const payload: GetPathDetailListPayload = {
+    id: Number(id),
+  }
+
+  const response = await getPathDetailList(payload);
+
+  // todo 錯誤處理
+  if (!response.success) {
+    return;
+  }
 
   // init
-  Object.assign(data, response);
+  Object.assign(data, response.data);
 
   console.log(response);
 
