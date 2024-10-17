@@ -12,7 +12,7 @@ const colddown = () => {
   isColddown.value = true;
   setTimeout(() => {
     isColddown.value = false;
-  }, 1500);
+  }, 500);
 }
 
 const previousStep = () => {
@@ -43,8 +43,8 @@ const { hasNextStep = false, hasPreviousStep = false } = defineProps<{
 <template>
   <div class="w-full h-full flex justify-around items-center">
     <div
-      class="text-2xl flex justify-center px-8 py-2 rounded-full bg-gray-500 cursor-pointer w-[65px]"
-      :class="{ 'opacity-50': !hasPreviousStep }"
+      class="text-2xl flex justify-center px-12 py-4 rounded-full bg-gray-500 cursor-pointer w-[65px]"
+      :class="[ !hasPreviousStep ? 'opacity-50' : 'hover:bg-gray-600' ]"
       @click="previousStep"
     >
       <font-awesome-icon :icon="['fas', 'backward-step']" />
@@ -59,8 +59,9 @@ const { hasNextStep = false, hasPreviousStep = false } = defineProps<{
       </div>
     </div>
     <div
-      class="text-2xl flex justify-center px-8 py-2 rounded-full bg-gray-500 cursor-pointer w-[65px]"
+      class="text-2xl flex justify-center px-12 py-4 rounded-full cursor-pointer w-[65px]"
       @click="nextStep"
+      :class="[ !hasNextStep ? 'bg-green-400 hover:bg-green-500' : 'bg-gray-500 hover:bg-gray-600' ]"
     >
       <font-awesome-icon v-if="!hasNextStep" :icon="['fas', 'street-view']" />
       <font-awesome-icon v-else :icon="['fas', 'forward-step']" />

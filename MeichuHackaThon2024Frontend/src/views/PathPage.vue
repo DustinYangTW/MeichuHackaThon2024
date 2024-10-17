@@ -124,6 +124,8 @@ const mockData: Path = {
 };
 
 const route = useRoute();
+const router = useRouter();
+const popuptitle = ref('');
 const data = reactive<Path>({
   id: 0,
   destination: '-',
@@ -153,7 +155,7 @@ const steps = (action: 'next' | 'pervious') => {
     completedSteps.value++;
 
     if (completedSteps.value === totalSteps.value) {
-      PopUpDoalogVisable.value = true;
+      handlePopUpDialog('抵達');
     }
   }
 
@@ -166,17 +168,36 @@ const steps = (action: 'next' | 'pervious') => {
   }
 }
 
+const handlePopUpDialog = (title: string) => {
+  popuptitle.value = title;
+  PopUpDoalogVisable.value = true;
+}
+
+watch(() => completedSteps.value, (step: number) => {
+  router.replace({
+    query: {
+      ...router.currentRoute.value.query,
+      step: String(step),
+    },
+  });
+
+  if (step === totalSteps.value) {
+    handlePopUpDialog('抵達');
+  }
+})
+
 onMounted(async() => {
   LoadingDialogVisable.value = true;
-  const { id } = route.query;
+  const { id, step } = route.query;
 
   // todo 未正確傳遞 query string value 導回首頁
   if(!id) {
-    console.log('路徑編號錯誤');
     LoadingDialogVisable.value = false;
+    handlePopUpDialog('路徑編號錯誤');
     return;
   }
 
+  // 模擬 api
   const response: Path = await new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve(mockData);
@@ -186,11 +207,11 @@ onMounted(async() => {
   // init
   Object.assign(data, response);
 
-  PopUpDoalogVisable.value = false;
-  completedSteps.value = 0;
-  totalSteps.value = data.path_details.length;
-
   console.log(response);
+
+  PopUpDoalogVisable.value = false;
+  completedSteps.value = step ? Number(step) : 0;
+  totalSteps.value = data.path_details.length;
 
   LoadingDialogVisable.value = false;
 })
@@ -224,6 +245,6 @@ onMounted(async() => {
       />
     </div>
     <LoadingDialog v-if="LoadingDialogVisable" />
-    <PopUpDoalog v-if="PopUpDoalogVisable" />
+    <PopUpDoalog v-if="PopUpDoalogVisable" :title="popuptitle" @close="PopUpDoalogVisable = false" />
   </div>
 </template>
