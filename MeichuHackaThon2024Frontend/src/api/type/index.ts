@@ -50,7 +50,10 @@ export interface PathDetail {
   * @example ‘青青草原’ | ‘新竹體育館’
   */
   destination: {
-    gps: string;
+    gps: {
+      lat: string;
+      lng: string;
+    };
     name: string;
   };
   /**
@@ -58,7 +61,10 @@ export interface PathDetail {
   * @example ‘本地’ | '陽明交大'
   */
   location: {
-    gps: string;
+    gps: {
+      lat: string;
+      lng: string;
+    };
     name: string;
   };
   /**
