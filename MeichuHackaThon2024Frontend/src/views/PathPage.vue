@@ -247,7 +247,7 @@ onMounted(async() => {
   >
     <div ref="mapRef" class="z-20 absolute w-[100dvw] h-[100dvh] top-0 left-0 flex justify-center items-center bg-gray-900 text-black">
     </div>
-    <div class="z-20 absolute top-4 text-3xl font-extrabold text-white bg-gray-900 py-2 px-5 rounded-lg">
+    <div class="z-20 absolute top-4 text-3xl font-extrabold text-white bg-gray-800 py-2 px-5 rounded-lg">
       目的地：{{ data.destination }}
     </div>
     <div class="z-20 absolute w-fit h-fit top-24 left-10 flex flex-col px-5 py-4 bg-gray-800 rounded-xl select-none">
