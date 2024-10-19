@@ -15,12 +15,11 @@ namespace MeichuHackaThon2024Model.ContextModel
             using (var context = new MeichuHackaThonDBContext(serviceProvider.GetRequiredService<DbContextOptions<MeichuHackaThonDBContext>>()))
             {
                 context.Paths.ExecuteDelete();
-                //if (!context.Paths.Any()) //必須在資料庫全是空的狀態下才建立種子資料
-                //#region 預設系統參數
-                //#endregion
-                var PointInfoData = new List<PointInfo>();
-                PointInfoData.AddRange([
-                new PointInfo
+                if (!context.Paths.Any()) //必須在資料庫全是空的狀態下才建立種子資料
+                {
+                    var PointInfoData = new List<PointInfo>();
+                    PointInfoData.AddRange([
+                    new PointInfo
                     {
                         Name = "TrainStation",
                         Latitude = 24.80177,
@@ -44,111 +43,121 @@ namespace MeichuHackaThon2024Model.ContextModel
                         Latitude = 24.798596,
                         Longitude = 120.971986
                     }
-                ]
-                );
-                context.AddRange( PointInfoData );
-                context.SaveChanges();
+                    ]
+                    );
+                    context.AddRange(PointInfoData);
+                    //var PointInfoData = new List<PointInfo>();
 
-                context.Paths.AddRange(
-                //new Models.PathDetail
-                //{
-                //    Location = "TrainStation",
-                //    Destination = "Zoo",
-                //    PathDetailId = 0,
-                //    StartPointId = PointInfoData.Where(x => x.Name == "TrainStation").FirstOrDefault().Id,
-                //    EndPointId = PointInfoData.Where(x => x.Name == "Zoo").FirstOrDefault().Id,
-                //    CostTime = 17,
-                //    Transportation = 
-                //    new Transportation
-                //    {
-                //        Type = Enums.TransportTypeEnum.Walk,
-                //        Remark = ""
-                //    },
-                //    Crowding = Enums.CrowdingEnum.General
-                //},
-                //new Models.PathDetail
-                //{
-                //    Location = "TrainStation",
-                //    Destination = "Zoo",
-                //    PathDetailId = 0,
-                //    StartPoint = new PointInfo
-                //    {
-                //        Name = "TrainStation",
-                //        Latitude = 24.80177,
-                //        Longitude = 120.97165
-                //    },
-                //    EndPoint = new PointInfo
-                //    {
-                //        Name = "TrainStation_BusStop",
-                //        Latitude = 24.803272,
-                //        Longitude = 120.971986
-                //    },
-                //    CostTime = 3,
-                //    Transportation = new Transportation
-                //    {
-                //        Type = Enums.TransportTypeEnum.Walk,
-                //        Remark = ""
-                //    },
-                //    Crowding = Enums.CrowdingEnum.General
-                //},
-                //new Models.PathDetail
-                //{
-                //    Location = "TrainStation",
-                //    Destination = "Zoo",
-                //    PathDetailId = 1,
-                //    StartPoint = new PointInfo
-                //    {
-                //        Name = "TrainStation_BusStop",
-                //        Latitude = 24.803272,
-                //        Longitude = 120.971986
-                //    },
-                //    EndPoint = new PointInfo
-                //    {
-                //        Name = "XueYuanMarket",
-                //        Latitude = 24.798596,
-                //        Longitude = 120.971986
-                //    },
-                //    CostTime = 6,
-                //    Transportation = new Transportation
-                //    {
-                //        Type = Enums.TransportTypeEnum.Bus,
-                //        Remark = "BlueOne"
-                //    },
-                //    Crowding = Enums.CrowdingEnum.General
-                //},
-                //new Models.PathDetail
-                //{
-                //    Location = "TrainStation",
-                //    Destination = "Zoo",
-                //    PathDetailId = 2,
-                //    StartPoint = new PointInfo
-                //    {
-                //        Name = "XueYuanMarket",
-                //        Latitude = 24.798596,
-                //        Longitude = 120.971986
-                //    },
-                //    EndPoint = new PointInfo
-                //    {
-                //        Name = "Zoo",
-                //        Latitude = 24.80036,
-                //        Longitude = 120.977736
-                //    },
-                //    CostTime = 7,
-                //    Transportation = new Transportation
-                //    {
-                //        Type = Enums.TransportTypeEnum.Walk,
-                //        Remark = ""
-                //    },
-                //    Crowding = Enums.CrowdingEnum.General
-                //}
-                );
-                context.SaveChanges();
-
-                if (!context.BusInformations.Any()) //必須在資料庫全是空的狀態下才建立種子資料
-                {
-                    var bus = GetGetBusInformationJson();
-                    context.BusInformations.AddRange(bus.Result);
                     context.SaveChanges();
+
+                    var PathsData = new List<Models.Path>();
+                    PathsData.AddRange([
+                        new Models.Path
+                    {
+                        Location = "轉運站",
+                        Destination = "動物園",
+                        StartPointId = PointInfoData.Where(x => x.Name == "TrainStation").FirstOrDefault().Id,
+                        EndPointId = PointInfoData.Where(x => x.Name == "Zoo").FirstOrDefault().Id,
+                        CostTime = 17,
+                        Transportation =new Transportation
+                                        {
+                                            Type = Enums.TransportTypeEnum.none,
+                                            Remark = "17"
+                                        },
+                         Crowding = Enums.CrowdingEnum.General
+                    }
+                    ]);
+                    context.AddRange(PathsData);
+                    context.SaveChanges();
+
+                    context.PathDetails.AddRange(
+                    new Models.PathDetail
+                    {
+                        Location = "轉運站",
+                        Destination = "動物園",
+                        PathDetailId = 0,
+                        StartPoint = new PointInfo
+                        {
+                            Name = "轉運站",
+                            Latitude = 24.80177,
+                            Longitude = 120.97165
+                        },
+                        EndPoint = new PointInfo
+                        {
+                            Name = "轉運公車站牌",
+                            Latitude = 24.803272,
+                            Longitude = 120.971986
+                        },
+                        CostTime = 3,
+                        Transportation = new Transportation
+                        {
+                            Type = Enums.TransportTypeEnum.Bus,
+                            Remark = "3"
+                        },
+                        Crowding = Enums.CrowdingEnum.General,
+                        PathId = PathsData.Where(x => x.Location == "轉運站" && x.Destination == "動物園").FirstOrDefault().Id
+                    },
+                    new Models.PathDetail
+                    {
+                        Location = "轉運站",
+                        Destination = "動物園",
+                        PathDetailId = 1,
+                        StartPoint = new PointInfo
+                        {
+                            Name = "轉運公車站牌",
+                            Latitude = 24.803272,
+                            Longitude = 120.971986
+                        },
+                        EndPoint = new PointInfo
+                        {
+                            Name = "龍山社區口",
+                            Latitude = 24.798596,
+                            Longitude = 120.971986
+                        },
+                        CostTime = 6,
+                        Transportation = new Transportation
+                        {
+                            Type = Enums.TransportTypeEnum.Bus,
+                            Remark = "6"
+                        },
+                        Crowding = Enums.CrowdingEnum.General,
+                        PathId = PathsData.Where(x => x.Location == "轉運站" && x.Destination == "動物園").FirstOrDefault().Id
+                    },
+                    new Models.PathDetail
+                    {
+                        Location = "轉運站",
+                        Destination = "動物園",
+                        PathDetailId = 2,
+                        StartPoint = new PointInfo
+                        {
+                            Name = "龍山社區口",
+                            Latitude = 24.798596,
+                            Longitude = 120.971986
+                        },
+                        EndPoint = new PointInfo
+                        {
+                            Name = "動物園",
+                            Latitude = 24.80036,
+                            Longitude = 120.977736
+                        },
+                        CostTime = 7,
+                        Transportation = new Transportation
+                        {
+                            Type = Enums.TransportTypeEnum.Bus,
+                            Remark = ""
+                        },
+                        Crowding = Enums.CrowdingEnum.General,
+                        PathId = PathsData.Where(x => x.Location == "轉運站" && x.Destination == "動物園").FirstOrDefault().Id
+                    }
+                    );
+                    context.SaveChanges();
+
+                    if (!context.BusInformations.Any()) //必須在資料庫全是空的狀態下才建立種子資料
+                    {
+                        var bus = GetGetBusInformationJson();
+                        context.BusInformations.AddRange(bus.Result);
+                        context.SaveChanges();
+                    }
                 }
             }
         }
