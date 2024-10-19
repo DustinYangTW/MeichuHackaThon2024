@@ -164,6 +164,12 @@ namespace MeichuHackaThon2024Model.ContextModel
                     context.WaterStations.AddRange(WaterStation.Result);
                     context.SaveChanges();
                 }
+                if (!context.PublicToilets.Any()) //必須在資料庫全是空的狀態下才建立種子資料
+                {
+                    var PublicToilets = GetPublicToiletJson();
+                    context.PublicToilets.AddRange(PublicToilets.Result);
+                    context.SaveChanges();
+                }
             }
         }
 
@@ -245,6 +251,37 @@ namespace MeichuHackaThon2024Model.ContextModel
                 }
             }
             return waterStation;
+        }
+
+        public static async Task<List<PublicToilet>> GetPublicToiletJson()
+        {
+            string url = "https://odws.hccg.gov.tw/001/Upload/25/opendata/9059/81/5672e4c5-63c7-4336-aa9e-34c09aa2f446.json?1130731092101";
+            List<PublicToilet> PublicToilets = new List<PublicToilet>();
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    // 發送 GET 請求
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode(); // 確認請求成功
+
+                    // 讀取 JSON 字串
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    // 解析 JSON (此處你可以用自訂的類別來接收資料)
+                    var jsonData = JsonSerializer.Deserialize<List<PublicToilet>>(jsonString);
+                    PublicToilets = jsonData;
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Request error: {e.Message}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error: {e.Message}");
+                }
+            }
+            return PublicToilets;
         }
     }
 }

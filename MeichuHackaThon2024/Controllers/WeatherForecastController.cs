@@ -73,12 +73,14 @@ namespace MeichuHackaThon2024.Controllers
         private readonly MeichuHackaThonDBContext _context_info;
         private readonly IGetBusRouteService _getBusRouteService;
         private readonly IGetWaterStationService _getWaterStationService;
+        private readonly IGetPublicToiletService _getPublicToiletService;
 
-        public GovApiController(MeichuHackaThonDBContext context_info, IGetBusRouteService getBusRouteService, IGetWaterStationService getWaterStationService)
+        public GovApiController(MeichuHackaThonDBContext context_info, IGetBusRouteService getBusRouteService, IGetWaterStationService getWaterStationService, IGetPublicToiletService getPublicToiletService)
         {
             _context_info = context_info;
             _getBusRouteService = getBusRouteService;
             _getWaterStationService = getWaterStationService;
+            _getPublicToiletService = getPublicToiletService;
         }
 
         [HttpGet]
@@ -97,6 +99,15 @@ namespace MeichuHackaThon2024.Controllers
             List<WaterStation> WaterStations = new List<WaterStation>();
             WaterStations = _getWaterStationService.GetWaterStationList().Take(50).ToList();
             return WaterStations;
+        }
+
+        [HttpGet]
+        public List<PublicToilet> PublicToiletList()
+        {
+            //IGetBusRouteService
+            List<PublicToilet> PublicToilets = new List<PublicToilet>();
+            PublicToilets = _getPublicToiletService.GetPublicToiletList().Take(50).ToList();
+            return PublicToilets;
         }
     }
 }
