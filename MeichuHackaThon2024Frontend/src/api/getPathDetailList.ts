@@ -140,7 +140,7 @@ const mockData: Path = {
       arrivalTime: '08:28',
       transport: {
         type: '公車',
-        remark: '公車編號 5801'
+        remark: '5801'
       },
       crowding: 3
     },
