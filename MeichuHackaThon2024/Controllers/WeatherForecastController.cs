@@ -44,8 +44,8 @@ namespace MeichuHackaThon2024.Controllers
         /// </summary>
         /// <param name="Sysno"></param>
         /// <returns></returns>
-        [HttpGet(Name = "getPathList")]
-        public PathDetailViewModel getPathList(int Sysno)
+        [HttpGet(Name = "getPath")]
+        public PathDetailViewModel getPath(int Sysno)
         {
             PathDetailViewModel tesxt = new PathDetailViewModel();
             tesxt = _IPathInfoData.Path(Sysno);
@@ -72,19 +72,31 @@ namespace MeichuHackaThon2024.Controllers
     {
         private readonly MeichuHackaThonDBContext _context_info;
         private readonly IGetBusRouteService _getBusRouteService;
+        private readonly IGetWaterStationService _getWaterStationService;
 
-        public GovApiController(MeichuHackaThonDBContext context_info, IGetBusRouteService getBusRouteService)
+        public GovApiController(MeichuHackaThonDBContext context_info, IGetBusRouteService getBusRouteService, IGetWaterStationService getWaterStationService)
         {
             _context_info = context_info;
             _getBusRouteService = getBusRouteService;
+            _getWaterStationService = getWaterStationService;
         }
+
         [HttpGet]
         public List<BusRoute> busRoutesList()
         {
             //IGetBusRouteService
             List<BusRoute> busRoutes = new List<BusRoute>();
-            busRoutes = _getBusRouteService.GetBusRouteList().Take(10).ToList();
+            busRoutes = _getBusRouteService.GetBusRouteList().Take(50).ToList();
             return busRoutes;
+        }
+
+        [HttpGet]
+        public List<WaterStation> WaterStationList()
+        {
+            //IGetBusRouteService
+            List<WaterStation> WaterStations = new List<WaterStation>();
+            WaterStations = _getWaterStationService.GetWaterStationList().Take(50).ToList();
+            return WaterStations;
         }
     }
 }
