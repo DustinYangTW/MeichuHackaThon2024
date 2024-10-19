@@ -8,27 +8,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace MeichuHackaThon2024Model.Models
 {
-    public class PointInfo
-    {
-        [Key]
-        [DisplayName("流水號")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public string? Name { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-
-    }
-    public class Transportation
-    {
-        [Key]
-        [DisplayName("流水號")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public TransportTypeEnum Type { get; set; }
-        public string? Remark { get; set; }
-    }
-    public class PathDetail
+    public class Path
     {
         [Key]
         [DisplayName("流水號")]
@@ -42,7 +22,7 @@ namespace MeichuHackaThon2024Model.Models
         public string? Destination { get; set; }
 
         [DisplayName("路線編號")]
-        public int PathIds { get; set; }
+        public int PathId { get; set; }
 
         [DisplayName("路線詳情編號")]
         public int PathDetailId { get; set; }
@@ -69,9 +49,8 @@ namespace MeichuHackaThon2024Model.Models
         [DisplayName("擁擠程度")]
         public CrowdingEnum Crowding { get; set; }
 
-        [DisplayName("路線編號")]
-        public int PathId { get; set; }  // Foreign key to Path
-        [ForeignKey("PathId")]
-        public virtual Path Path { get; set; }  // Relationship back to Path
+        // Updated to represent the one-to-many relationship
+        [DisplayName("路線詳情")]
+        public virtual ICollection<PathDetail> PathDetails { get; set; } = new List<PathDetail>();
     }
 }

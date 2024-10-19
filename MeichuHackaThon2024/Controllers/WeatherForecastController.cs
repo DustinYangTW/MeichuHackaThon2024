@@ -43,11 +43,11 @@ namespace MeichuHackaThon2024.Controllers
             _context_info = context_info;
         }
 
-        [HttpGet(Name = "DataBase")]
-        public IEnumerable<MeichuHackaThon2024Model.Models.PathDetail> Get()
-        {
-            return _context_info.Paths;
-        }
+        //[HttpGet(Name = "DataBase")]
+        //public IEnumerable<MeichuHackaThon2024Model.Models.PathDetail> Get()
+        //{
+        //    return _context_info.Paths;
+        //}
     }
     [Route("[controller]/[action]")]
     [ApiController]
