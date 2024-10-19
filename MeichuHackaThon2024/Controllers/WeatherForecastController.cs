@@ -1,5 +1,6 @@
 using MeichuHackaThon2024Model.ContextModel;
 using MeichuHackaThon2024Model.ViewModel;
+using MeichuHackaThon2024Model.ViewModel.response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeichuHackaThon2024.Controllers
@@ -48,7 +49,7 @@ namespace MeichuHackaThon2024.Controllers
             return _context_info.Paths;
         }
     }
-    [Route("Path/[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class PathController : ControllerBase
     {
@@ -68,6 +69,13 @@ namespace MeichuHackaThon2024.Controllers
         public AllPathData GetPathInfoData()
         {
             AllPathData tesxt = new AllPathData();
+            return tesxt;
+        }
+
+        [HttpGet(Name = "getPathList")]
+        public PathDetailViewModel getPathList()
+        {
+            PathDetailViewModel tesxt = new PathDetailViewModel();
             return tesxt;
         }
     }

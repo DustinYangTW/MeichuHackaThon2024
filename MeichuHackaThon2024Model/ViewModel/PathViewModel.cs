@@ -27,7 +27,7 @@ namespace MeichuHackaThon2024Model.ViewModel
         /// <summary>
         /// 交通工具
         /// </summary>
-        public Transportation Transportation { get; set; }
+        public TransportationViewModel Transportation { get; set; }
         /// <summary>
         /// 擁擠程度
         /// </summary>

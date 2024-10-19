@@ -1,6 +1,6 @@
 ﻿namespace MeichuHackaThon2024Model.ViewModel
 {
-    public class PathDetailViewModel
+    public class PathDetail2ViewModel
     {
         /// <summary>
         /// 起始站
@@ -13,6 +13,6 @@
         /// <summary>
         /// 路徑(多個)
         /// </summary>
-        public List<List<PathViewModel>> Path { get; set; }
+        public List<path_detailsViewModel> Path { get; set; }
     }
 }
