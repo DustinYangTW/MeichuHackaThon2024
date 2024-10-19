@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SideInfo from "../components/PathPage/SideInfo.vue";
 import BottomInfo from "../components/PathPage/BottomInfo.vue";
-import LoadingDialog from "../components/PathPage/LoadingDialog.vue";
+import LoadingDialog from "../components/LoadingDialog.vue";
 import PopUpDoalog from "../components/PathPage/PopUpDoalog.vue";
 import { getPathDetailList } from '../api';
 import type { GetPathDetailListPayload } from '../api';
