@@ -1,4 +1,5 @@
 using MeichuHackaThon2024Model.ContextModel;
+using MeichuHackaThon2024Model.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeichuHackaThon2024.Controllers
@@ -57,10 +58,17 @@ namespace MeichuHackaThon2024.Controllers
             _context_info = context_info;
         }
 
-        [HttpGet(Name = "PathInfo")]
-        public IEnumerable<MeichuHackaThon2024Model.Models.PathDetail> Get()
+        //[HttpGet(Name = "PathInfo")]
+        //public IEnumerable<MeichuHackaThon2024Model.Models.PathDetail> Get()
+        //{
+        //    return _context_info.Paths;
+        //}
+
+        [HttpGet(Name = "PathInfoData")]
+        public IEnumerable<PathDetailViewModel> GetPathInfoData()
         {
-            return _context_info.Paths;
+            List<PathDetailViewModel> text = new List<PathDetailViewModel>();
+            return text;
         }
     }
 }
