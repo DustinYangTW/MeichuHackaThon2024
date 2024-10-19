@@ -151,13 +151,18 @@ namespace MeichuHackaThon2024Model.ContextModel
                     }
                     );
                     context.SaveChanges();
-
-                    if (!context.BusInformations.Any()) //必須在資料庫全是空的狀態下才建立種子資料
-                    {
-                        var bus = GetGetBusInformationJson();
-                        context.BusInformations.AddRange(bus.Result);
-                        context.SaveChanges();
-                    }
+                }
+                if (!context.BusInformations.Any()) //必須在資料庫全是空的狀態下才建立種子資料
+                {
+                    var bus = GetGetBusInformationJson();
+                    context.BusInformations.AddRange(bus.Result);
+                    context.SaveChanges();
+                }
+                if (!context.WaterStations.Any()) //必須在資料庫全是空的狀態下才建立種子資料
+                {
+                    var WaterStation = GetWaterStationJson();
+                    context.WaterStations.AddRange(WaterStation.Result);
+                    context.SaveChanges();
                 }
             }
         }
@@ -209,6 +214,37 @@ namespace MeichuHackaThon2024Model.ContextModel
                 }
             }
             return bus;
+        }
+
+        public static async Task<List<WaterStation>> GetWaterStationJson()
+        {
+            string url = "https://odws.hccg.gov.tw/001/Upload/25/opendata/9059/250/28baa3fb-5ea2-4d02-91c9-34268881adea.json?1130802145038";
+            List<WaterStation> waterStation = new List<WaterStation>();
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    // 發送 GET 請求
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode(); // 確認請求成功
+
+                    // 讀取 JSON 字串
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    // 解析 JSON (此處你可以用自訂的類別來接收資料)
+                    var jsonData = JsonSerializer.Deserialize<List<WaterStation>>(jsonString);
+                    waterStation = jsonData;
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Request error: {e.Message}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error: {e.Message}");
+                }
+            }
+            return waterStation;
         }
     }
 }
