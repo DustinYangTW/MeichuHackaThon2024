@@ -10,6 +10,10 @@ namespace MeichuHackaThon2024Model.Models
 {
     public class PointInfo
     {
+        [Key]
+        [DisplayName("流水號")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public string? Name { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
@@ -17,6 +21,10 @@ namespace MeichuHackaThon2024Model.Models
     }
     public class Transportation
     {
+        [Key]
+        [DisplayName("流水號")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public TransportTypeEnum Type { get; set; }
         public string? Remark { get; set; }
     }
@@ -39,20 +47,24 @@ namespace MeichuHackaThon2024Model.Models
         [DisplayName("路線詳情編號")]
         public int PathDetailId { get; set; }
 
-        [NotMapped]
         [DisplayName("起點")]
-        public required virtual PointInfo StartPoint { get; set; }
+        public int StartPointId { get; set; }  // 外鍵
+        [ForeignKey("StartPointId")]
+        public virtual PointInfo StartPoint { get; set; }  // 關聯
 
-        [NotMapped]
         [DisplayName("終點")]
-        public required virtual PointInfo EndPoint { get; set; }
+        public int EndPointId { get; set; }  // 外鍵
+        [ForeignKey("EndPointId")]
+        public virtual PointInfo EndPoint { get; set; }  // 關聯
+
 
         [DisplayName("耗時(Min)")]
         public double CostTime { get; set; }
 
-        [NotMapped]
         [DisplayName("交通工具")]
-        public required virtual Transportation Transportation { get; set; }
+        public int TransportationId { get; set; }  // 外鍵
+        [ForeignKey("TransportationId")]
+        public virtual Transportation Transportation { get; set; }  // 關聯
 
         [DisplayName("擁擠程度")]
         public CrowdingEnum Crowding { get; set; }
