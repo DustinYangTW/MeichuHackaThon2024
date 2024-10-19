@@ -4,10 +4,46 @@ import { getPathList } from "@/api";
 import PathCard from "@/components/PathSelectionPage/PathCard.vue";
 import PDetail from "@/components/PathSelectionPage/PDetail.vue";
 import type { Path, PathDetail } from "@/type";
+import { generateMap } from '../common/generateMap'
 
 const route = useRoute();
-let response;
 const pathData = ref<Path[]>([]);
+const pathSelect = ref<number>(-1);
+const mapRef = ref<HTMLElement | null>(null);
+const mapId = ref<number>(0);
+
+const pathCardClick = (id: number) => {
+  if (pathSelect.value === id) {
+    pathSelect.value = -1;
+    return;
+  }
+
+  pathSelect.value = id;
+
+  const data = pathData.value.filter((d) => d.id === id)[0];
+
+  if (data) {
+    const locs = data.path_details.map((d) => {
+      return {
+        lng: d.location.gps.lng,
+        lat: d.location.gps.lat
+      }
+    })
+    const timestampDiv = document.createElement("div");
+    const oldMap = document.getElementById(`map${mapId.value}`);
+    if (oldMap) {
+      oldMap.remove();
+    }
+    mapId.value = Date.now();
+    timestampDiv.id = `map` + mapId.value.toString();
+    mapRef.value?.appendChild(timestampDiv);
+    document.getElementById(timestampDiv.id)!.style.height = "100dvh";
+    document.getElementById(timestampDiv.id)!.style.width = "100dvw";
+
+    generateMap(locs, timestampDiv.id);
+  }
+};
+
 onMounted(async () => {
   const { q } = route.query;
 
@@ -15,8 +51,25 @@ onMounted(async () => {
     des: q as string,
     loc: q as string,
   };
-  response = await getPathList(payload);
+  const response = await getPathList(payload);
   pathData.value = response.data;
+
+  console.log(response.data);
+
+  const locs = [
+    {
+      lng: response.data[0].path_details[0].location.gps.lng,
+      lat: response.data[0].path_details[0].location.gps.lat
+    }
+  ]
+  const timestampDiv = document.createElement("div");
+  mapId.value = Date.now();
+  timestampDiv.id = `map` + mapId.value.toString();
+  mapRef.value?.appendChild(timestampDiv);
+  document.getElementById(timestampDiv.id)!.style.height = "100dvh";
+  document.getElementById(timestampDiv.id)!.style.width = "100dvw";
+
+  generateMap(locs, timestampDiv.id);
 });
 
 const calctime = (s: string) => {
@@ -53,29 +106,26 @@ const calcPercentage = (
 </script>
 
 <template>
-  <nav class="h-auto z-10">
-    <ul class="w-1/3 h-full list-none">
-      <li v-for="path in pathData" :key="path.id" class="my-2 relative w-fit">
-        <PathCard :path="path">
-          <!-- 這裡需要假資料包含不重複的id才能正常運作 -->
-          <input
-            type="checkbox"
-            :id="path.id.toString()"
-            class="peer opacity-0 h-0"
-          />
-        </PathCard>
-        <ul
-          role="menu"
-          class="opacity-0 h-0 peer-checked:h-auto peer-checked:opacity-100"
-        >
-          <li role="menuitem">
-            <PDetail v-for="d in path.path_details" :detail="d"></PDetail>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
-  <!-- 還沒接地圖+沒找到最新push的commit -->
+  <div class="flex">
+    <nav class="h-auto z-10">
+      <ul class="h-[100dvh] overflow-y-auto list-none flex flex-col">
+        <li v-for="path in pathData" :key="path.id" class="w-full">
+          <div @click="pathCardClick(path.id)">
+            <PathCard :path="path" />
+            <ul
+              role="menu"
+              :class="[ pathSelect === path.id ? 'h-auto opacity-100' : 'hidden' ]"
+            >
+              <li role="menuitem">
+                <PDetail v-for="d in path.path_details" :detail="d"></PDetail>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <div ref="mapRef" class="w-full h-full bg-gray-400" />
+  </div>
 </template>
 
 <style scpoe>

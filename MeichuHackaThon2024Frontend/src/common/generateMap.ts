@@ -22,7 +22,7 @@ export const generateMap = (locs: {
   // 初始化地圖
   map = Leaflet.map(id, {
     center: [totalLng / locs.length, totalLat / locs.length],
-    zoom: 80,
+    zoom: 100,
   });
 
   // todo point myself
