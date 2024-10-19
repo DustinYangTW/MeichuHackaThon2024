@@ -85,7 +85,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="absolute w-[100dvw] h-[100dvh] top-0 left-0" id="firework">
+  <div class="z-20 absolute w-[100dvw] h-[100dvh] top-0 left-0" id="firework">
     <div class="absolute top-0 left-0 w-full h-full backdrop-blur-[1px]" />
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/3 h-1/3 rounded-xl bg-gray-800 text-black flex flex-col justify-center items-center p-8">
       <div class="h-full p-6 text-5xl text-white font-extrabold flex justify-center items-center">

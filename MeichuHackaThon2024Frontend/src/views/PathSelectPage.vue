@@ -77,3 +77,9 @@ const calcPercentage = (
   </nav>
   <!-- 還沒接地圖+沒找到最新push的commit -->
 </template>
+
+<style scpoe>
+::-webkit-scrollbar {
+  display: none;
+}
+</style>

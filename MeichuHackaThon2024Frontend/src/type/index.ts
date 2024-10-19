@@ -1,2 +1,4 @@
-export type { Path } from './Path';
-export type { PathDetail } from './PathDetail';
+import type { Path } from '../api/type';
+import type { PathDetail } from '../api/type';
+
+export type { Path, PathDetail };
