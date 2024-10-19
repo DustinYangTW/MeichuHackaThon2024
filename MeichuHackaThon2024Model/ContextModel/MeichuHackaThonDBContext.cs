@@ -15,6 +15,7 @@ namespace MeichuHackaThon2024Model.ContextModel
         public virtual DbSet<Transportation> Transportations { get; set; }
         public virtual DbSet<PointInfo> PointInfos { get; set; }
         public virtual DbSet<WaterStation> WaterStations { get; set; }
+        public virtual DbSet<PublicToilet> PublicToilets { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
