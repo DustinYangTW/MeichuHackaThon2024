@@ -1,6 +1,7 @@
 using MeichuHackaThon2024Model.ContextModel;
 using MeichuHackaThon2024Model.ViewModel;
 using MeichuHackaThon2024Model.ViewModel.response;
+using MeichuHackaThon2024Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeichuHackaThon2024.Controllers
@@ -54,9 +55,11 @@ namespace MeichuHackaThon2024.Controllers
     public class PathController : ControllerBase
     {
         private readonly MeichuHackaThonDBContext _context_info;
-        public PathController(MeichuHackaThonDBContext context_info)
+        private readonly IPathInfoDataService _IPathInfoData;
+        public PathController(MeichuHackaThonDBContext context_info, IPathInfoDataService pathInfoData)
         {
             _context_info = context_info;
+            _IPathInfoData = pathInfoData;
         }
 
         //[HttpGet(Name = "PathInfo")]
@@ -66,16 +69,17 @@ namespace MeichuHackaThon2024.Controllers
         //}
 
         [HttpGet(Name = "PathInfoData")]
-        public AllPathData GetPathInfoData()
+        public List<MeichuHackaThon2024Model.Models.Path> GetPathInfoDatas()
         {
-            AllPathData tesxt = new AllPathData();
-            return tesxt;
+            var getPathInfoData = _context_info.Paths.ToList();
+            return getPathInfoData;
         }
 
         [HttpGet(Name = "getPathList")]
-        public PathDetailViewModel getPathList()
+        public PathDetailViewModel getPathList(int Sysno)
         {
             PathDetailViewModel tesxt = new PathDetailViewModel();
+            tesxt = _IPathInfoData.Path(Sysno);
             return tesxt;
         }
     }

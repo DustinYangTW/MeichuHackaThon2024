@@ -15,7 +15,7 @@
         /// </summary>
         public path_detailsViewModel Path { get; set; }
         /// <summary>
-        /// 路徑(單個)
+        /// 路徑(多個)
         /// </summary>
         public List<path_detailsViewModel> PathAllDetail { get; set; }
     }
