@@ -14,7 +14,7 @@ namespace MeichuHackaThon2024Model.ContextModel
         {
             using (var context = new MeichuHackaThonDBContext(serviceProvider.GetRequiredService<DbContextOptions<MeichuHackaThonDBContext>>()))
             {
-                context.Paths.ExecuteDelete();
+                //context.Paths.ExecuteDelete();
                 if (!context.Paths.Any()) //必須在資料庫全是空的狀態下才建立種子資料
                 {
                     var PointInfoData = new List<PointInfo>();

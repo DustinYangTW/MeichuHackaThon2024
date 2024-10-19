@@ -1,4 +1,6 @@
+using MeichuHackaThon2024Model.ApiJson;
 using MeichuHackaThon2024Model.ContextModel;
+using MeichuHackaThon2024Model.Models;
 using MeichuHackaThon2024Model.ViewModel;
 using MeichuHackaThon2024Model.ViewModel.response;
 using MeichuHackaThon2024Services.Interface;
@@ -12,10 +14,12 @@ namespace MeichuHackaThon2024.Controllers
     {
         private readonly MeichuHackaThonDBContext _context_info;
         private readonly IPathInfoDataService _IPathInfoData;
-        public PathController(MeichuHackaThonDBContext context_info, IPathInfoDataService pathInfoData)
+        private readonly IPathAllDatasServers _IPathAllDatasServers;
+        public PathController(MeichuHackaThonDBContext context_info, IPathInfoDataService pathInfoData, IPathAllDatasServers iPathAllDatasServers)
         {
             _context_info = context_info;
             _IPathInfoData = pathInfoData;
+            _IPathAllDatasServers = iPathAllDatasServers;
         }
 
         //[HttpGet(Name = "PathInfo")]
@@ -24,6 +28,10 @@ namespace MeichuHackaThon2024.Controllers
         //    return _context_info.Paths;
         //}
 
+        /// <summary>
+        /// 抓取全部Path資料
+        /// </summary>
+        /// <returns></returns>
         [HttpGet(Name = "PathInfoData")]
         public List<MeichuHackaThon2024Model.Models.Path> GetPathInfoDatas()
         {
@@ -31,12 +39,52 @@ namespace MeichuHackaThon2024.Controllers
             return getPathInfoData;
         }
 
+        /// <summary>
+        /// 抓取單一Path資料
+        /// </summary>
+        /// <param name="Sysno"></param>
+        /// <returns></returns>
         [HttpGet(Name = "getPathList")]
         public PathDetailViewModel getPathList(int Sysno)
         {
             PathDetailViewModel tesxt = new PathDetailViewModel();
-            tesxt = _IPathInfoData.Path(1);
+            tesxt = _IPathInfoData.Path(Sysno);
             return tesxt;
+        }
+
+        /// <summary>
+        /// 抓取單一PathDetail資料
+        /// </summary>
+        /// <param name="Sysno"></param>
+        /// <returns></returns>
+        [HttpGet(Name = "getPathDetail")]
+        public path_detailsViewModel getPathDetail(int Sysno)
+        {
+            path_detailsViewModel tesxt = new path_detailsViewModel();
+            tesxt = _IPathAllDatasServers.GetPathAllDatas(Sysno).First();
+            return tesxt;
+        }
+    }
+
+    [Route("[controller]/[action]")]
+    [ApiController]
+    public class GovApiController : ControllerBase
+    {
+        private readonly MeichuHackaThonDBContext _context_info;
+        private readonly IGetBusRouteService _getBusRouteService;
+
+        public GovApiController(MeichuHackaThonDBContext context_info, IGetBusRouteService getBusRouteService)
+        {
+            _context_info = context_info;
+            _getBusRouteService = getBusRouteService;
+        }
+        [HttpGet]
+        public List<BusRoute> busRoutesList()
+        {
+            //IGetBusRouteService
+            List<BusRoute> busRoutes = new List<BusRoute>();
+            busRoutes = _getBusRouteService.GetBusRouteList().Take(10).ToList();
+            return busRoutes;
         }
     }
 }
