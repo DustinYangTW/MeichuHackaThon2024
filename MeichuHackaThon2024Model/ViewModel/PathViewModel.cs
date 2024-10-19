@@ -5,6 +5,10 @@ namespace MeichuHackaThon2024Model.ViewModel
     public class PathViewModel
     {
         /// <summary>
+        /// 路徑ID
+        /// </summary>
+        public int pathId {  get; set; }
+        /// <summary>
         /// 起始點
         /// </summary>
         public required PointInfo StartPoint { get; set; }

@@ -13,6 +13,6 @@
         /// <summary>
         /// 路徑(多個)
         /// </summary>
-        public List<PathViewModel> Path { get; set; }
+        public List<List<PathViewModel>> Path { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using MeichuHackaThon2024Model.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Xml.Linq;
 
@@ -17,25 +18,50 @@ namespace MeichuHackaThon2024Model.ContextModel
                 //if (!context.Paths.Any()) //必須在資料庫全是空的狀態下才建立種子資料
                 //#region 預設系統參數
                 //#endregion
-                context.Paths.AddRange(
-                new Models.PathDetail
-                {
-                    Location  = "TrainStation",
-                    Destination = "Zoo",
-                    PathId = 0,
-                    PathDetailId = 0,
-                    StartPoint = new PointInfo { 
+                var PointInfoData = new List<PointInfo>();
+                PointInfoData.AddRange([
+                new PointInfo
+                    {
                         Name = "TrainStation",
                         Latitude = 24.80177,
                         Longitude = 120.97165
                     },
-                    EndPoint = new PointInfo { 
+                new PointInfo
+                    {
                         Name = "Zoo",
                         Latitude = 24.80036,
                         Longitude = 120.977736
                     },
+                new PointInfo
+                    {
+                        Name = "TrainStation_BusStop",
+                        Latitude = 24.803272,
+                        Longitude = 120.971986
+                    },
+                new PointInfo
+                    {
+                        Name = "XueYuanMarket",
+                        Latitude = 24.798596,
+                        Longitude = 120.971986
+                    }
+                ]
+                );
+                context.AddRange( PointInfoData );
+                context.SaveChanges();
+
+                context.Paths.AddRange(
+                new Models.PathDetail
+                {
+                    Location = "TrainStation",
+                    Destination = "Zoo",
+                    PathId = 0,
+                    PathDetailId = 0,
+                    StartPointId = PointInfoData.Where(x => x.Name == "TrainStation").FirstOrDefault().Id,
+                    EndPointId = PointInfoData.Where(x => x.Name == "Zoo").FirstOrDefault().Id,
                     CostTime = 17,
-                    Transportation = new Transportation{
+                    Transportation = 
+                    new Transportation
+                    {
                         Type = Enums.TransportTypeEnum.Walk,
                         Remark = ""
                     },
@@ -166,7 +192,7 @@ namespace MeichuHackaThon2024Model.ContextModel
                         Latitude = x.緯度,
                         OperationType = x.營運屬性
                     }).ToList();
-                    
+
                 }
                 catch (HttpRequestException e)
                 {

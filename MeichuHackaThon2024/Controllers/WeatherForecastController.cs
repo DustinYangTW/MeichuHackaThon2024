@@ -65,10 +65,10 @@ namespace MeichuHackaThon2024.Controllers
         //}
 
         [HttpGet(Name = "PathInfoData")]
-        public IEnumerable<PathDetailViewModel> GetPathInfoData()
+        public AllPathData GetPathInfoData()
         {
-            List<PathDetailViewModel> text = new List<PathDetailViewModel>();
-            return text;
+            AllPathData tesxt = new AllPathData();
+            return tesxt;
         }
     }
 }
