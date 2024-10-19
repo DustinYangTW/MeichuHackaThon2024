@@ -7,6 +7,7 @@ import type { Path, PathDetail } from "@/type";
 import { generateMap } from '../common/generateMap'
 
 const route = useRoute();
+const router = useRouter();
 const pathData = ref<Path[]>([]);
 const pathSelect = ref<number>(-1);
 const mapRef = ref<HTMLElement | null>(null);
@@ -43,6 +44,14 @@ const pathCardClick = (id: number) => {
     generateMap(locs, timestampDiv.id);
   }
 };
+
+const nextStep = () => {
+  if (pathSelect.value === -1) {
+    return;
+  }
+
+  router.push({ name: 'PathPage', query: { id: pathSelect.value } });
+}
 
 onMounted(async () => {
   const { q } = route.query;
@@ -107,7 +116,7 @@ const calcPercentage = (
 
 <template>
   <div class="flex">
-    <nav class="h-auto z-10">
+    <nav class="h-auto z-10 relative">
       <ul class="h-[100dvh] overflow-y-auto list-none flex flex-col">
         <li v-for="path in pathData" :key="path.id" class="w-full">
           <div @click="pathCardClick(path.id)">
@@ -123,8 +132,14 @@ const calcPercentage = (
           </div>
         </li>
       </ul>
+      <div
+        class="absolute bottom-0 w-full h-fit py-3 bg-green-600 hover:bg-green-800 cursor-pointer flex justify-center items-center text-2xl text-white font-extrabold"
+        @click="nextStep"
+      >
+        選擇
+      </div>
     </nav>
-    <div ref="mapRef" class="w-full h-full bg-gray-400" />
+    <div ref="mapRef" class="w-full h-full bg-gray-400 relative" />
   </div>
 </template>
 

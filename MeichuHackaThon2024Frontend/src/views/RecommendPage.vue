@@ -47,8 +47,14 @@ onMounted(() => {
 
 <template>
   <div
-    class="w-full h-full bg-gray-900 duration-1000 flex flex-col justify-start items-center pt-12 pl-8 gap-12 select-none"
+    class="w-full h-full bg-gray-900 duration-1000 flex flex-col justify-start items-center pt-12 pl-8 gap-12 select-none relative"
   >
+    <button
+      class="absolute top-0 left-6 text-xl font-bold py-4 text-white rounded-2xl w-fit flex justify-center items-center hover:text-blue-700 hover:underline"
+      @click="router.push({ name: 'home' });"
+    >
+      < 首頁
+    </button>
     <div class="flex gap-5">
       <div
         v-for="type in types" :key="type"
