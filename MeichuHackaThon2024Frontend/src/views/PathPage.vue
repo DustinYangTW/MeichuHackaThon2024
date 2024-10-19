@@ -245,9 +245,8 @@ onMounted(async() => {
   <div
     class="relative w-full h-full flex flex-col items-center p-4 text-white"
   >
-    <div ref="mapRef" class="z-20 absolute w-[100dvw] h-[100dvh] top-0 left-0 flex justify-center items-center bg-gray-900 text-black">
-    </div>
-    <div class="z-20 absolute top-4 text-3xl font-extrabold text-white bg-gray-800 py-2 px-5 rounded-lg">
+    <div ref="mapRef" class="z-20 absolute w-[100dvw] h-[100dvh] top-0 left-0 flex justify-center items-center bg-gray-900 text-black" />
+    <div class="z-20 absolute top-4 text-[1.5rem] font-extrabold text-white bg-gray-800 py-2 px-5 rounded-lg">
       目的地：{{ data.destination }}
     </div>
     <div class="z-20 absolute w-fit h-fit top-24 left-10 flex flex-col px-5 py-4 bg-gray-800 rounded-xl select-none">
@@ -258,7 +257,7 @@ onMounted(async() => {
         :transport="data.path_details[completedSteps]?.transport ?? {}"
       />
     </div>
-    <div class="z-20 absolute bottom-8 mx-6 bg-gray-800 w-5/6 px-6 py-4 rounded-xl select-none">
+    <div class="z-20 absolute bottom-2 mx-6 bg-gray-800 bg-opacity-85 w-5/6 px-6 py-4 rounded-xl select-none">
       <BottomInfo
         :data="data.path_details[completedSteps] ?? {}"
         :hasNextStep="completedSteps < totalSteps - 1"
