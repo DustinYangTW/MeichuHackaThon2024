@@ -203,15 +203,15 @@ const mockData: Path[] = [
     ],
   },
   {
-    id: 1,
+    id: 2,
     destination: '青青草原',
     location: '國立陽明交通大學體育館',
     costTime: '1h 4m',
     arrivalTime: '09:04',
     transportComp: {
-      '公車': 33,
-      'Bike': 17,
-      '步行': 17
+      '公車': 70,
+      'Bike': 25,
+      '步行': 5
     },
     crowding: 0,
     path_details: [
@@ -355,15 +355,15 @@ const mockData: Path[] = [
       }
     ],
   }, {
-    id: 1,
+    id: 3,
     destination: '青青草原',
     location: '國立陽明交通大學體育館',
     costTime: '1h 4m',
     arrivalTime: '09:04',
     transportComp: {
-      '公車': 33,
-      'Bike': 17,
-      '步行': 17
+      '公車': 50,
+      'Bike': 30,
+      '步行': 20
     },
     crowding: 0,
     path_details: [

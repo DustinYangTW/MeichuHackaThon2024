@@ -2,8 +2,10 @@ export interface FuzzyList {
   /**
    * 查詢關鍵字 列表
    */
-  list: string[]
+  list: string[];
 }
+
+export type vehicle = "公車" | "Bike" | "步行";
 
 export interface Path {
   /**
@@ -29,26 +31,26 @@ export interface Path {
    * 到達時間
    * @example "11:30"
    */
-  arrivalTime: string,
+  arrivalTime: string;
   /**
    * 交通工具種類以及%數
    */
-  transportComp: Record<'公車' | 'Bike' | '步行', number>
+  transportComp: Record<"公車" | "Bike" | "步行", number>;
   /**
    * 擁擠程度
    */
-  crowding: number,
+  crowding: number;
   /**
    * 子路徑選項
    */
-  path_details: PathDetail[]
+  path_details: PathDetail[];
 }
 
 export interface PathDetail {
   /**
-  * 目的地名稱
-  * @example ‘青青草原’ | ‘新竹體育館’
-  */
+   * 目的地名稱
+   * @example ‘青青草原’ | ‘新竹體育館’
+   */
   destination: {
     gps: {
       lat: string;
@@ -57,9 +59,9 @@ export interface PathDetail {
     name: string;
   };
   /**
-  * 本地位置名稱
-  * @example ‘本地’ | '陽明交大'
-  */
+   * 本地位置名稱
+   * @example ‘本地’ | '陽明交大'
+   */
   location: {
     gps: {
       lat: string;
@@ -68,27 +70,27 @@ export interface PathDetail {
     name: string;
   };
   /**
-  * 耗時
-  * @example "1h 30m"
-  */
+   * 耗時
+   * @example "1h 30m"
+   */
   costTime: string;
   /**
-  * 到達時間
-  * @example "11:30"
-  */
+   * 到達時間
+   * @example "11:30"
+   */
   arrivalTime: string;
   /**
-  * 交通工具
-  */
+   * 交通工具
+   */
   transport: {
-    type: '公車' | 'Bike' | '步行';
+    type: vehicle;
     /**
      * 公車 Ubike 會有車號或是站號
      */
     remark: string;
   };
   /**
-  * 擁擠程度
-  */
+   * 擁擠程度
+   */
   crowding: number;
 }

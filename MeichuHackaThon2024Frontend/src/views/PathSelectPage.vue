@@ -1,71 +1,130 @@
 <script setup lang="ts">
-import { getPathList } from '@/api';
-import type { GetPathListPayload } from '@/api';
-import type { Path } from '@/type';
+import type { GetPathListPayload } from "@/api";
+import { getPathList } from "@/api";
+import PathCard from "@/components/PathSelectionPage/PathCard.vue";
+import PDetail from "@/components/PathSelectionPage/PDetail.vue";
+import type { Path, PathDetail } from "@/type";
+import { generateMap } from '../common/generateMap'
 
 const route = useRoute();
+const pathData = ref<Path[]>([]);
+const pathSelect = ref<number>(-1);
+const mapRef = ref<HTMLElement | null>(null);
+const mapId = ref<number>(0);
 
-const data = ref<Path[]>([]);
-const recommendList = ref([]);
+const pathCardClick = (id: number) => {
+  if (pathSelect.value === id) {
+    pathSelect.value = -1;
+    return;
+  }
+
+  pathSelect.value = id;
+
+  const data = pathData.value.filter((d) => d.id === id)[0];
+
+  if (data) {
+    const locs = data.path_details.map((d) => {
+      return {
+        lng: d.location.gps.lng,
+        lat: d.location.gps.lat
+      }
+    })
+    const timestampDiv = document.createElement("div");
+    const oldMap = document.getElementById(`map${mapId.value}`);
+    if (oldMap) {
+      oldMap.remove();
+    }
+    mapId.value = Date.now();
+    timestampDiv.id = `map` + mapId.value.toString();
+    mapRef.value?.appendChild(timestampDiv);
+    document.getElementById(timestampDiv.id)!.style.height = "100dvh";
+    document.getElementById(timestampDiv.id)!.style.width = "100dvw";
+
+    generateMap(locs, timestampDiv.id);
+  }
+};
 
 onMounted(async () => {
   const { q } = route.query;
 
-  // todo 未正確傳遞 query string value 導回首頁
-  if(!q) {
-    return;
-  }
-
   const payload: GetPathListPayload = {
     des: q as string,
     loc: q as string,
-  }
-
+  };
   const response = await getPathList(payload);
+  pathData.value = response.data;
 
-  if(!response.success) {
-    return;
+  console.log(response.data);
+
+  const locs = [
+    {
+      lng: response.data[0].path_details[0].location.gps.lng,
+      lat: response.data[0].path_details[0].location.gps.lat
+    }
+  ]
+  const timestampDiv = document.createElement("div");
+  mapId.value = Date.now();
+  timestampDiv.id = `map` + mapId.value.toString();
+  mapRef.value?.appendChild(timestampDiv);
+  document.getElementById(timestampDiv.id)!.style.height = "100dvh";
+  document.getElementById(timestampDiv.id)!.style.width = "100dvw";
+
+  generateMap(locs, timestampDiv.id);
+});
+
+const calctime = (s: string) => {
+  const timePartition = s.split(" ");
+
+  if (timePartition.length == 1) {
+    let minString = timePartition[0];
+    const extraIndex = minString.match(/m/)?.index;
+    return Number.parseInt(minString.slice(extraIndex));
   }
 
-  data.value = response.data;
+  let hourString = timePartition[0],
+    minString = timePartition[1];
+  const extraInd1 = hourString.match(/h/)?.index;
+  const extraInd2 = minString.match(/m/)?.index;
 
-  console.log(response);
-})
+  const hours = Number.parseInt(hourString.slice(extraInd1));
+  const mins = Number.parseInt(minString.slice(extraInd2));
+  return hours * 60 + mins;
+};
+
+const calcPercentage = (
+  details: PathDetail[],
+  type: "公車" | "Bike" | "步行"
+) => {
+  const total = details.reduce((acc, cur) => calctime(cur.costTime) + acc, 0);
+  const timePortion = details
+    .filter(each => typeof each.transport.type === typeof type)
+    .reduce((acc, cur) => calctime(cur.costTime) + acc, 0);
+
+  const percentage = `${Math.round(total / timePortion)} %`;
+  return percentage;
+};
 </script>
 
 <template>
-  <div
-    class="w-full h-full bg-gray-900 duration-1000 flex flex-col justify-start items-center pt-12 pl-8 gap-12 select-none"
-  >
-    <div class="overflow-x-scroll">
-      <div v-if="data.length === 0">
-        empty
-      </div>
-      <div
-        v-else
-        class="flex flex-wrap justify-center gap-3 relative"
-      >
-        <div
-          v-for="(item, index) in data" :key="`${item}-${index}`"
-          class="flex flex-col px-5 py-4 bg-gray-800 rounded-xl bg-cover bg-no-repeat bg-center w-[500px] h-[350px] relative"
-        >
-          <div class="absolute bottom-2 w-[480px] left-1/2 -translate-x-1/2 bg-white rounded-xl text-black px-4 py-3 flex flex-col gap-[1px]">
-            <div class="text-xl font-bold flex justify-between">
-              <div class="font-black">
-                {{ item.costTime }}
-              </div>
-              <div class="text-blue-500 cursor-pointer hover:text-blue-800" @click="console.log('go');">
-                <font-awesome-icon :icon="['fas', 'person-walking-dashed-line-arrow-right']" />
-                出發
-              </div>
-            </div>
-            <div class="text-base">
-              {{ item.crowding }}
-            </div>
+  <div class="flex">
+    <nav class="h-auto z-10">
+      <ul class="h-[100dvh] overflow-y-auto list-none flex flex-col">
+        <li v-for="path in pathData" :key="path.id" class="w-full">
+          <div @click="pathCardClick(path.id)">
+            <PathCard :path="path" />
+            <ul
+              role="menu"
+              :class="[ pathSelect === path.id ? 'h-auto opacity-100' : 'hidden' ]"
+            >
+              <li role="menuitem">
+                <PDetail v-for="d in path.path_details" :detail="d"></PDetail>
+              </li>
+            </ul>
           </div>
-        </div>
-      </div>
-    </div>
+        </li>
+      </ul>
+    </nav>
+    <div ref="mapRef" class="w-full h-full bg-gray-400" />
   </div>
 </template>
 
