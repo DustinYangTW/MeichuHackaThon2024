@@ -17,11 +17,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 /* import specific icons */
 import {
-  faArrowsDownToLine, faArrowsTurnRight, faUserPlus, faCaretDown, faBars, faUpload, faCopy, faMagnifyingGlass
+  faArrowsDownToLine, faArrowsTurnRight, faUserPlus, faCaretDown, faBars, faUpload, faCopy, faMagnifyingGlass, faShoePrints, faBicycle, faBus, faForwardStep, faBackwardStep, faStreetView, faSpinner, faPersonWalkingDashedLineArrowRight
 } from '@fortawesome/free-solid-svg-icons';
 
 /* add icons to the library */
-library.add(faArrowsDownToLine, faArrowsTurnRight, faUserPlus, faCaretDown, faBars, faUpload, faCopy, faMagnifyingGlass);
+library.add(faArrowsDownToLine, faArrowsTurnRight, faUserPlus, faCaretDown, faBars, faUpload, faCopy, faMagnifyingGlass, faShoePrints, faBicycle, faBus, faForwardStep, faBackwardStep, faStreetView, faSpinner, faPersonWalkingDashedLineArrowRight);
 
 const app = createApp(App)
 
