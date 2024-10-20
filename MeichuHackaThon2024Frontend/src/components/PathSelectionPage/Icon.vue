@@ -13,5 +13,9 @@ const { trasportType } = defineProps<{ trasportType: vehicle }>();
       :icon="['fas', 'shoe-prints']"
       v-else-if="trasportType === '步行'"
     />
+    <font-awesome-icon
+      :icon="['fas', 'car-side']"
+      v-else-if="trasportType === '共乘'"
+    />
   </span>
 </template>

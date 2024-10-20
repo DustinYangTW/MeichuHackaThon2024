@@ -1,7 +1,8 @@
-import axios from 'axios';
-import type { Path } from './type';
-import type { Response } from './transformResponse';
-import { transformResponse } from './transformResponse';
+import axios from "axios";
+import type { Path } from "./type";
+import type { Response } from "./transformResponse";
+import { transformResponse } from "./transformResponse";
+import { mockPathData } from "./getPathList";
 
 export interface GetPathDetailListPayload {
   /**
@@ -13,7 +14,9 @@ export interface GetPathDetailListPayload {
 /**
  * 取得路徑詳細列表
  */
-export async function getPathDetailList(payload: GetPathDetailListPayload): Promise<Response<Path>> {
+export async function getPathDetailList(
+  payload: GetPathDetailListPayload
+): Promise<Response<Path>> {
   const { id } = payload;
   try {
     // const response = await axios.get<Response>('/getPathDetailList', {
@@ -24,171 +27,321 @@ export async function getPathDetailList(payload: GetPathDetailListPayload): Prom
 
     const response: Path = await new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(mockData);
+        resolve(mockData[id]);
       }, 1500);
-    })
+    });
 
     return transformResponse({
-      code: '0001',
-      msg: 'success',
-      data: response
+      code: "0001",
+      msg: "success",
+      data: response,
     });
   } catch (error) {
-    console.error('Error fetching fuzzy search list:', error);
-    throw new Error('Failed to fetch fuzzy search list');
+    console.error("Error fetching fuzzy search list:", error);
+    throw new Error("Failed to fetch fuzzy search list");
   }
 }
 
-const mockData: Path = {
-  id: 1,
-  destination: '青青草原',
-  location: '國立陽明交通大學體育館',
-  costTime: '1h 4m',
-  arrivalTime: '09:04',
-  transportComp: {
-    '公車': 33,
-    'Bike': 17,
-    '步行': 17
+const mockData = {
+  "1": {
+    id: 1,
+    destination: "城隍廟前廣場",
+    location: "國立陽明交通大學體育館",
+    costTime: "35m",
+    arrivalTime: "09:04",
+    transportComp: {
+      公車: 84,
+      Bike: 0,
+      步行: 16,
+      共乘: 0,
+    },
+    crowding: 0,
+    path_details: [
+      {
+        location: {
+          gps: {
+            lat: "120.99573786220625",
+            lng: "24.788946082114585",
+          },
+          name: "國立陽明交通大學體育館",
+        },
+        destination: {
+          gps: {
+            lat: "120.99754927480843",
+            lng: "24.796508074536952",
+          },
+          name: "清華大學",
+        },
+        costTime: "16分",
+        arrivalTime: "08:00",
+        transport: {
+          type: "步行",
+          remark: "步行",
+        },
+        crowding: 2,
+      },
+      {
+        location: {
+          gps: {
+            lat: "120.99754927480843",
+            lng: "24.796508074536952",
+          },
+          name: "清華大學",
+        },
+        destination: {
+          gps: {
+            lat: " 120.97101060750855",
+            lng: "24.803320896069028",
+          },
+          name: "新竹火車站(中正路)",
+        },
+        costTime: "11分",
+        arrivalTime: "08:13",
+        transport: {
+          type: "公車",
+          remark: "5608",
+        },
+        crowding: 4,
+      },
+      {
+        location: {
+          gps: {
+            lat: " 120.97101060750855",
+            lng: "24.803320896069028",
+          },
+          name: "新竹火車站(中正路)",
+        },
+        destination: {
+          gps: {
+            lat: " 120.96593168750877",
+            lng: "24.80445711912709",
+          },
+          name: "新竹都城隍廟",
+        },
+        costTime: "8分",
+        arrivalTime: "08:13",
+        transport: {
+          type: "步行",
+          remark: "步行",
+        },
+        crowding: 4,
+      },
+    ],
   },
-  crowding: 0,
-  path_details: [
-    {
-      destination: {
-        gps: {
-          lat: '120.99573887802406',
-          lng: '24.78903620803964'
-        },
-        name: '國立陽明交通大學體育館'
-      },
-      location: {
-        gps: {
-          lat: '120.99042577195945',
-          lng: '24.789935063671024'
-        },
-        name: '生科館人社院'
-      },
-      costTime: '13分',
-      arrivalTime: '08:00',
-      transport: {
-        type: '步行',
-        remark: '步行'
-      },
-      crowding: 2
+  "2": {
+    id: 2,
+    destination: "城隍廟前廣場",
+    location: "國立陽明交通大學體育館",
+    costTime: "42m",
+    arrivalTime: "09:04",
+    transportComp: {
+      公車: 90,
+      Bike: 0,
+      步行: 10,
+      共乘: 0,
     },
-    {
-      destination: {
-        gps: {
-          lat: '120.97293793904349',
-          lng: '24.80405034393874'
+    crowding: 0,
+    path_details: [
+      {
+        location: {
+          gps: {
+            lat: "120.99573786220625",
+            lng: "24.788946082114585",
+          },
+          name: "國立陽明交通大學體育館",
         },
-        name: '新竹轉運站'
-      },
-      location: {
-        gps: {
-          lat: '120.99042577195945',
-          lng: '24.789935063671024'
+        destination: {
+          gps: {
+            lat: "120.99941877283285",
+            lng: "24.788299026754014",
+          },
+          name: "交大光復校區",
         },
-        name: '生科館人社院'
+        costTime: "7分",
+        arrivalTime: "08:00",
+        transport: {
+          type: "步行",
+          remark: "步行",
+        },
+        crowding: 2,
       },
-      costTime: '10分',
-      arrivalTime: '08:13',
-      transport: {
-        type: '公車',
-        remark: '83'
+      {
+        location: {
+          gps: {
+            lat: "120.99941877283285",
+            lng: "24.788299026754014",
+          },
+          name: "交大光復校區",
+        },
+        destination: {
+          gps: {
+            lat: "120.96933763923636",
+            lng: "24.80548842304441",
+          },
+          name: "東門市場",
+        },
+        costTime: "28分",
+        arrivalTime: "08:13",
+        transport: {
+          type: "公車",
+          remark: "2A經建功高中",
+        },
+        crowding: 4,
       },
-      crowding: 4
+      {
+        location: {
+          gps: {
+            lat: "120.96933763923636",
+            lng: "24.80548842304441",
+          },
+          name: "東門市場",
+        },
+        destination: {
+          gps: {
+            lat: "120.96597468181294",
+            lng: "24.805040672214925",
+          },
+          name: "城隍廟前廣場",
+        },
+        costTime: "7分",
+        arrivalTime: "08:23",
+        transport: {
+          type: "步行",
+          remark: "步行",
+        },
+        crowding: 1,
+      },
+    ],
+  },
+  "3": {
+    id: 3,
+    destination: "城隍廟前廣場",
+    location: "國立陽明交通大學體育館",
+    costTime: "51m",
+    arrivalTime: "09:04",
+    transportComp: {
+      公車: 0,
+      Bike: 20,
+      步行: 53,
+      共乘: 27,
     },
-    {
-      destination: {
-        gps: {
-          lat: '120.9713821394101',
-          lng: '24.80348381742814'
+    crowding: 0,
+    path_details: [
+      {
+        location: {
+          gps: {
+            lat: "120.99573786220625",
+            lng: "24.788946082114585",
+          },
+          name: "國立陽明交通大學體育館",
         },
-        name: '新竹火車站(中正路)'
-      },
-      location: {
-        gps: {
-          lat: '120.97293793904349',
-          lng: '24.80405034393874'
+        destination: {
+          gps: {
+            lat: "120.99939195216426",
+            lng: "24.788310883357507",
+          },
+          name: "交大光復校區",
         },
-        name: '新竹轉運站'
-      },
-      costTime: '5分',
-      arrivalTime: '08:23',
-      transport: {
-        type: '步行',
-        remark: '步行'
-      },
-      crowding: 1
-    },
-    {
-      destination: {
-        gps: {
-          lat: '120.997713',
-          lng: '24.791641'
+        costTime: "7分",
+        arrivalTime: "08:00",
+        transport: {
+          type: "步行",
+          remark: "步行",
         },
-        name: '朝山'
+        crowding: 2,
       },
-      location: {
-        gps: {
-          lat: '120.9713821394101',
-          lng: '24.80348381742814'
+      {
+        location: {
+          gps: {
+            lat: "120.99939195216426",
+            lng: "24.788310883357507",
+          },
+          name: "交大光復校區",
         },
-        name: '新竹火車站(中正路)'
-      },
-      costTime: '20分',
-      arrivalTime: '08:28',
-      transport: {
-        type: '公車',
-        remark: '5801'
-      },
-      crowding: 3
-    },
-    {
-      destination: {
-        gps: {
-          lat: '120.997713',
-          lng: '24.791641'
+        destination: {
+          gps: {
+            lat: "121.00240561038945",
+            lng: "24.79267822031121",
+          },
+          name: "陽明交大光復路(過溝)",
         },
-        name: '香山天后宮'
-      },
-      location: {
-        gps: {
-          lat: '120.995061',
-          lng: '24.785061'
+        costTime: "14分",
+        arrivalTime: "08:23",
+        transport: {
+          type: "步行",
+          remark: "步行",
         },
-        name: '朝山'
+        crowding: 1,
       },
-      costTime: '5分',
-      arrivalTime: '08:48',
-      transport: {
-        type: '步行',
-        remark: '步行'
-      },
-      crowding: 3
-    },
-    {
-      destination: {
-        gps: {
-          lat: '120.997713',
-          lng: '24.791641'
+      {
+        location: {
+          gps: {
+            lat: "121.00240561038945",
+            lng: "24.79267822031121",
+          },
+          name: "陽明交大光復路(過溝)",
         },
-        name: '青青草原'
-      },
-      location: {
-        gps: {
-          lat: '120.995061',
-          lng: '24.785061'
+        destination: {
+          gps: {
+            lat: "120.98310352069274",
+            lng: "24.802410321639847",
+          },
+          name: "食品路口",
         },
-        name: '香山天后宮'
+        costTime: "14分",
+        arrivalTime: "08:23",
+        transport: {
+          type: "共乘",
+          remark: "動物園線",
+        },
+        crowding: 1,
       },
-      costTime: '16分',
-      arrivalTime: '09:04',
-      transport: {
-        type: 'Bike',
-        remark: '香山天后宮站'
+      {
+        location: {
+          gps: {
+            lat: "120.98310352069274",
+            lng: "24.802410321639847",
+          },
+          name: "食品路口",
+        },
+        destination: {
+          gps: {
+            lat: "120.98096502386976",
+            lng: "24.800197579066086",
+          },
+          name: "YouBike 新竹動物園",
+        },
+        costTime: "6分",
+        arrivalTime: "08:23",
+        transport: {
+          type: "步行",
+          remark: "步行",
+        },
+        crowding: 1,
       },
-      crowding: 1
-    }
-  ],
-}
+      {
+        location: {
+          gps: {
+            lat: "120.98096502386976",
+            lng: "24.800197579066086",
+          },
+          name: "YouBike 新竹動物園",
+        },
+        destination: {
+          gps: {
+            lat: "120.96599065443802",
+            lng: "24.80477590112634",
+          },
+          name: "城隍廟前廣場",
+        },
+        costTime: "10分",
+        arrivalTime: "08:23",
+        transport: {
+          type: "Bike",
+          remark: "新竹動物園站",
+        },
+        crowding: 1,
+      },
+    ],
+  },
+};

@@ -2,6 +2,7 @@
 import type { PathDetail } from "@/type";
 import Icon from "@/components/PathSelectionPage/Icon.vue";
 const { detail } = defineProps<{ detail: PathDetail }>();
+console.log(detail);
 </script>
 
 <template>
@@ -11,7 +12,7 @@ const { detail } = defineProps<{ detail: PathDetail }>();
     <div class="flex items-center gap-2 max-w-full py-1">
       <Icon :trasport-type="detail.transport.type" />
       <span class="text-2xl text-nowrap">{{ detail.transport.remark }}</span>
-      <span class="text-3xl ml-auto">{{ detail.costTime }}</span>
+      <span class="text-2xl ml-auto">{{ detail.costTime }}</span>
     </div>
   </div>
 </template>
