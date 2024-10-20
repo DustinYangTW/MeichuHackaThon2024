@@ -4,7 +4,7 @@ import HeaderMenu from '../components/Layout/HeaderMenu.vue'
 
 <template>
   <div class="flex flex-col w-svw h-svh">
-    <HeaderMenu />
+    <!-- <HeaderMenu /> -->
     <RouterView />
   </div>
 </template>

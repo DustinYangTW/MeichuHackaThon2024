@@ -4,13 +4,16 @@ import { getPathList } from "@/api";
 import PathCard from "@/components/PathSelectionPage/PathCard.vue";
 import PDetail from "@/components/PathSelectionPage/PDetail.vue";
 import type { Path, PathDetail } from "@/type";
-import { generateMap } from '../common/generateMap'
+import { generateMap } from '../common/generateMap';
+import LoadingDialog from '../components/LoadingDialog.vue';
 
 const route = useRoute();
+const router = useRouter();
 const pathData = ref<Path[]>([]);
 const pathSelect = ref<number>(-1);
 const mapRef = ref<HTMLElement | null>(null);
 const mapId = ref<number>(0);
+const LoadingDialogVisable = ref<boolean>(false);
 
 const pathCardClick = (id: number) => {
   if (pathSelect.value === id) {
@@ -44,7 +47,17 @@ const pathCardClick = (id: number) => {
   }
 };
 
+const nextStep = () => {
+  if (pathSelect.value === -1) {
+    return;
+  }
+
+  router.push({ name: 'PathPage', query: { id: pathSelect.value } });
+}
+
 onMounted(async () => {
+  LoadingDialogVisable.value = true;
+
   const { q } = route.query;
 
   const payload: GetPathListPayload = {
@@ -70,6 +83,8 @@ onMounted(async () => {
   document.getElementById(timestampDiv.id)!.style.width = "100dvw";
 
   generateMap(locs, timestampDiv.id);
+
+  LoadingDialogVisable.value = false;
 });
 
 const calctime = (s: string) => {
@@ -106,10 +121,10 @@ const calcPercentage = (
 </script>
 
 <template>
-  <div class="flex">
-    <nav class="h-auto z-10">
+  <div class="flex relative bg-gray-800">
+    <nav class="h-auto z-10 relative">
       <ul class="h-[100dvh] overflow-y-auto list-none flex flex-col">
-        <li v-for="path in pathData" :key="path.id" class="w-full">
+        <li v-for="path in pathData" :key="path.id" class="w-full border-b-2 border-white border-dashed bg-gray-400">
           <div @click="pathCardClick(path.id)">
             <PathCard :path="path" />
             <ul
@@ -123,8 +138,16 @@ const calcPercentage = (
           </div>
         </li>
       </ul>
+      <div
+        class="absolute bottom-0 w-full h-fit py-3 cursor-pointer flex justify-center items-center text-2xl text-white font-extrabold"
+        :class="[ pathSelect === -1 ? 'bg-gray-600 cursor-not-allowed' : 'bg-green-600 hover:bg-green-800' ]"
+        @click="nextStep"
+      >
+        選擇
+      </div>
     </nav>
-    <div ref="mapRef" class="w-full h-full bg-gray-400" />
+    <div ref="mapRef" class="w-full h-full bg-gray-400 relative" />
+    <LoadingDialog v-if="LoadingDialogVisable" />
   </div>
 </template>
 

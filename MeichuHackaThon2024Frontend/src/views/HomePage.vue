@@ -79,7 +79,7 @@ onMounted(async () => {
     <div class="w-full text-white text-4xl sm:text-6xl md:text-8xl py-4 font-extrabold">
       開始你的旅程吧
     </div>
-    <div class="w-full flex flex-wrap gap-3 relative">
+    <div class="w-full flex flex-wrap gap-4 relative">
       <div
         v-if="fuzzyDialog"
         class="absolute left-0 w-[250px] sm:w-[400px] md:w-[500px] bg-white rounded-2xl overflow-y-auto text-black z-10"
@@ -110,6 +110,12 @@ onMounted(async () => {
         @click="searchPath"
       >
         <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+      </button>
+      <button
+        class="text-xl font-bold py-4 text-white rounded-2xl w-fit flex justify-center items-center hover:text-blue-700 hover:underline"
+        @click="router.push({ name: 'RecommendPage' });"
+      >
+        沒有想法...
       </button>
     </div>
   </div>
