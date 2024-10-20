@@ -12,7 +12,7 @@ const { path } = defineProps<{
   >
     <label :for="path.id.toString()">
       <slot name="content">
-        <font-awesome-icon :icon="['fas', 'clock']" />
+        <font-awesome-icon :icon="['fa', 'clock']" class="text-2xl" />
         <h3 class="inline">{{ path.costTime }}</h3>
         <hr class="border-white rounded-full py-2" />
 
@@ -23,9 +23,7 @@ const { path } = defineProps<{
               <div>
                 {{ path.transportComp.步行 }}
               </div>
-              <div>
-                %
-              </div>
+              <div>%</div>
             </span>
           </div>
           <div class="flex gap-1 justify-center items-center">
@@ -34,9 +32,7 @@ const { path } = defineProps<{
               <div>
                 {{ path.transportComp.Bike }}
               </div>
-              <div>
-                %
-              </div>
+              <div>%</div>
             </span>
           </div>
           <div class="flex gap-1 justify-center items-center">
@@ -45,9 +41,17 @@ const { path } = defineProps<{
               <div>
                 {{ path.transportComp.公車 }}
               </div>
+              <div>%</div>
+            </span>
+          </div>
+
+          <div class="flex gap-1 justify-center items-center">
+            <font-awesome-icon :icon="['fas', 'car-side']" />
+            <span class="flex justify-center items-center">
               <div>
-                %
+                {{ path.transportComp.共乘 ?? 0 }}
               </div>
+              <div>%</div>
             </span>
           </div>
         </div>

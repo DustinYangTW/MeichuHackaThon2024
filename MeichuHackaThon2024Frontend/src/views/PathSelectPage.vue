@@ -4,8 +4,8 @@ import { getPathList } from "@/api";
 import PathCard from "@/components/PathSelectionPage/PathCard.vue";
 import PDetail from "@/components/PathSelectionPage/PDetail.vue";
 import type { Path, PathDetail } from "@/type";
-import { generateMap } from '../common/generateMap';
-import LoadingDialog from '../components/LoadingDialog.vue';
+import { generateMap } from "../common/generateMap";
+import LoadingDialog from "../components/LoadingDialog.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -23,15 +23,22 @@ const pathCardClick = (id: number) => {
 
   pathSelect.value = id;
 
-  const data = pathData.value.filter((d) => d.id === id)[0];
+  const data = pathData.value.filter(d => d.id === id)[0];
 
   if (data) {
-    const locs = data.path_details.map((d) => {
+    let locs = [
+      {
+        lat: data.path_details[0].location.gps.lat,
+        lng: data.path_details[0].location.gps.lng,
+      },
+    ];
+    const newlocs = data.path_details.map(d => {
       return {
-        lng: d.location.gps.lng,
-        lat: d.location.gps.lat
-      }
-    })
+        lng: d.destination.gps.lng,
+        lat: d.destination.gps.lat,
+      };
+    });
+
     const timestampDiv = document.createElement("div");
     const oldMap = document.getElementById(`map${mapId.value}`);
     if (oldMap) {
@@ -43,7 +50,7 @@ const pathCardClick = (id: number) => {
     document.getElementById(timestampDiv.id)!.style.height = "100dvh";
     document.getElementById(timestampDiv.id)!.style.width = "100dvw";
 
-    generateMap(locs, timestampDiv.id);
+    generateMap([...locs, ...newlocs], timestampDiv.id);
   }
 };
 
@@ -52,8 +59,8 @@ const nextStep = () => {
     return;
   }
 
-  router.push({ name: 'PathPage', query: { id: pathSelect.value } });
-}
+  router.push({ name: "PathPage", query: { id: pathSelect.value } });
+};
 
 onMounted(async () => {
   LoadingDialogVisable.value = true;
@@ -72,9 +79,9 @@ onMounted(async () => {
   const locs = [
     {
       lng: response.data[0].path_details[0].location.gps.lng,
-      lat: response.data[0].path_details[0].location.gps.lat
-    }
-  ]
+      lat: response.data[0].path_details[0].location.gps.lat,
+    },
+  ];
   const timestampDiv = document.createElement("div");
   mapId.value = Date.now();
   timestampDiv.id = `map` + mapId.value.toString();
@@ -124,12 +131,18 @@ const calcPercentage = (
   <div class="flex relative bg-gray-800">
     <nav class="h-auto z-10 relative">
       <ul class="h-[100dvh] overflow-y-auto list-none flex flex-col">
-        <li v-for="path in pathData" :key="path.id" class="w-full border-b-2 border-white border-dashed bg-gray-400">
+        <li
+          v-for="path in pathData"
+          :key="path.id"
+          class="w-full border-b-2 border-white border-dashed bg-gray-400"
+        >
           <div @click="pathCardClick(path.id)">
             <PathCard :path="path" />
             <ul
               role="menu"
-              :class="[ pathSelect === path.id ? 'h-auto opacity-100' : 'hidden' ]"
+              :class="[
+                pathSelect === path.id ? 'h-auto opacity-100' : 'hidden',
+              ]"
             >
               <li role="menuitem">
                 <PDetail v-for="d in path.path_details" :detail="d"></PDetail>
@@ -140,7 +153,11 @@ const calcPercentage = (
       </ul>
       <div
         class="absolute bottom-0 w-full h-fit py-3 cursor-pointer flex justify-center items-center text-2xl text-white font-extrabold"
-        :class="[ pathSelect === -1 ? 'bg-gray-600 cursor-not-allowed' : 'bg-green-600 hover:bg-green-800' ]"
+        :class="[
+          pathSelect === -1
+            ? 'bg-gray-600 cursor-not-allowed'
+            : 'bg-green-600 hover:bg-green-800',
+        ]"
         @click="nextStep"
       >
         選擇

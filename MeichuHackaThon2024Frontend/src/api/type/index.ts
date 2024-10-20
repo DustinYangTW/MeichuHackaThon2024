@@ -5,7 +5,7 @@ export interface FuzzyList {
   list: string[];
 }
 
-export type vehicle = "公車" | "Bike" | "步行";
+export type vehicle = "公車" | "Bike" | "步行" | "共乘";
 
 export interface Path {
   /**
@@ -35,7 +35,7 @@ export interface Path {
   /**
    * 交通工具種類以及%數
    */
-  transportComp: Record<"公車" | "Bike" | "步行", number>;
+  transportComp: Record<vehicle, number>;
   /**
    * 擁擠程度
    */
